@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6FAE014218D5B7990055D5AF /* character.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAE014018D5B7990055D5AF /* character.cpp */; };
+		6FAE014B18D5E23D0055D5AF /* ofxSpeechRecognizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAE014718D5E23D0055D5AF /* ofxSpeechRecognizer.cpp */; };
+		6FAE014C18D5E23D0055D5AF /* ofxSpeechSynthesizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FAE014918D5E23D0055D5AF /* ofxSpeechSynthesizer.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -60,6 +63,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6FAE014018D5B7990055D5AF /* character.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = character.cpp; sourceTree = "<group>"; };
+		6FAE014118D5B7990055D5AF /* character.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = character.h; sourceTree = "<group>"; };
+		6FAE014618D5E23D0055D5AF /* ofxSpeech.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSpeech.h; sourceTree = "<group>"; };
+		6FAE014718D5E23D0055D5AF /* ofxSpeechRecognizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSpeechRecognizer.cpp; sourceTree = "<group>"; };
+		6FAE014818D5E23D0055D5AF /* ofxSpeechRecognizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSpeechRecognizer.h; sourceTree = "<group>"; };
+		6FAE014918D5E23D0055D5AF /* ofxSpeechSynthesizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSpeechSynthesizer.cpp; sourceTree = "<group>"; };
+		6FAE014A18D5E23D0055D5AF /* ofxSpeechSynthesizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxSpeechSynthesizer.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -114,9 +124,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6FAE014418D5E23D0055D5AF /* ofxSpeech */ = {
+			isa = PBXGroup;
+			children = (
+				6FAE014518D5E23D0055D5AF /* src */,
+			);
+			name = ofxSpeech;
+			sourceTree = "<group>";
+		};
+		6FAE014518D5E23D0055D5AF /* src */ = {
+			isa = PBXGroup;
+			children = (
+				6FAE014618D5E23D0055D5AF /* ofxSpeech.h */,
+				6FAE014718D5E23D0055D5AF /* ofxSpeechRecognizer.cpp */,
+				6FAE014818D5E23D0055D5AF /* ofxSpeechRecognizer.h */,
+				6FAE014918D5E23D0055D5AF /* ofxSpeechSynthesizer.cpp */,
+				6FAE014A18D5E23D0055D5AF /* ofxSpeechSynthesizer.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxSpeech/src;
+			sourceTree = "<group>";
+		};
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				6FAE014418D5E23D0055D5AF /* ofxSpeech */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -187,6 +219,8 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
+				6FAE014018D5B7990055D5AF /* character.cpp */,
+				6FAE014118D5B7990055D5AF /* character.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -288,7 +322,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				6FAE014B18D5E23D0055D5AF /* ofxSpeechRecognizer.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
+				6FAE014218D5B7990055D5AF /* character.cpp in Sources */,
+				6FAE014C18D5E23D0055D5AF /* ofxSpeechSynthesizer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,6 +15,41 @@ void testApp::setup() {
     step = 0;
     words = ofSplitString(lyrics, " ");
 
+    actorIndex = 0;
+    wordQueueIndex = 0;
+    
+    actors.push_back("Agnes");
+    actors.push_back("Albert");
+    actors.push_back("Alex");
+    actors.push_back("Bad News");
+    actors.push_back("Bahh");
+    actors.push_back("Bells");
+    actors.push_back("Boing");
+    actors.push_back("Bruce");
+    actors.push_back("Bubbles");
+    actors.push_back("Cellos");
+    actors.push_back("Deranged");
+    actors.push_back("Fred");
+    actors.push_back("Good News");
+    actors.push_back("Hysterical");
+    actors.push_back("Junior");
+    actors.push_back("Kathy");
+    actors.push_back("Pipe Organ");
+    actors.push_back("Princess");
+    actors.push_back("Ralph");
+    actors.push_back("Trinoids");
+    actors.push_back("Vicki");
+    actors.push_back("Victoria");
+    actors.push_back("Whisper");
+    actors.push_back("Zarvox");
+    for (int i = 0; i < actors.size(); i++) {
+        wordQueue.push_back("hello");
+        wordQueue.push_back("my");
+        wordQueue.push_back("name");
+        wordQueue.push_back("is");
+        wordQueue.push_back(actors[i]);
+    }
+    
     // we are running the systems commands
     // in a sperate thread so that it does
     // not block the drawing
@@ -30,17 +65,28 @@ void testApp::threadedFunction() {
         // call the system command say
 
         #ifdef TARGET_OSX
-            string cmd = "say -v "+voice+" "+words[step]+" ";   // create the command
+            string cmd = "say -v "+actors[actorIndex]+" "+wordQueue[wordQueueIndex]+" ";   // create the command
             system(cmd.c_str());
         #endif
         #ifdef TARGET_WIN32
-            string cmd = "data\\SayStatic.exe "+words[step];   // create the command
+            string cmd = "data\\SayStatic.exe "+wordQueue[wordQueueIndex];   // create the command
             cout << cmd << endl;
             system(cmd.c_str());
         #endif
 
 
-
+        //step to the next word
+        if (wordQueueIndex%5 == 4) {
+            actorIndex++;
+        }
+        if (wordQueueIndex == wordQueue.size()) {
+            wordQueueIndex = 0;
+        }
+        else {
+            wordQueueIndex++;
+        }
+        
+        
         // step to the next word
         step ++;
         step %= words.size();

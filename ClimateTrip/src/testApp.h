@@ -24,7 +24,15 @@ public:
 		void gotMessage(ofMessage msg);
     
     ofTrueTypeFont font;
-    vector <string> words;
+    
+    vector<string> words;
+    vector<string> wordQueue;
+    vector<string> actors;
+
+    int wordQueueIndex;
+    int actorIndex;
+    bool pause;
+    
     int step;
     
     bool bRandomVoice;
