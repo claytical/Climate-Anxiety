@@ -13,26 +13,26 @@ void testApp::setup(){
         ofLogNotice() << voices[i];
     }
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 3; i++) {
         Scene s;
         ofImage img;
-        img.loadImage(ofToString(i) + ".png");
-        s.create(img, i);
+         s.create(img, i);
         vector<Character> characters;
-        for (int j = 0; j < 6; j++) {
+        for (int j = 0; j < 2; j++) {
             switch (j) {
                 case 0:
-                    s.newCharacter("Bruce", "This is Bruce and I am talking in scene " + ofToString(i));
+                    s.newCharacter("Bruce", "I am Bruce and this is water " + ofToString(i));
                     break;
                 case 1:
-                    s.newCharacter("Albert", "This is Albert and I am talking in scene " + ofToString(i));
+                    s.newCharacter("Albert", "I am Albert and this is water " + ofToString(i));
                     break;
-                case 2:
+/*                case 2:
                     s.newCharacter("Victoria", "This is Victoria and I am talking in scene " + ofToString(i));
                     break;
                 default:
                     break;
-            }
+*/
+ }
             
         }
         scenes.push_back(s);
@@ -74,7 +74,7 @@ void testApp::nextScene() {
 }
 
 void testApp::randomUnplayedScene() {
-    scenes.erase(scenes.begin() + currentSceneIndex);
+//    scenes.erase(scenes.begin() + currentSceneIndex);
     currentSceneIndex = int(ofRandom(scenes.size()));
 //    if (scenes[currentSceneIndex].finished) {
 //        randomUnplayedScene();

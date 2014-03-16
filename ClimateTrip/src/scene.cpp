@@ -18,7 +18,7 @@ void Scene::create(ofImage img, int tid) {
 
 }
 void Scene::display() {
-    picture.draw(ofGetWidth()/2, ofGetHeight()/2);
+    picture.draw(0,0);
 }
 
 void Scene::start() {

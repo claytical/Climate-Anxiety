@@ -15,7 +15,8 @@ public:
     void display();
     int topicID;
     vector<Character> characters;
-    ofImage picture;
+    ofImage picture; // turn into vector, stays consistent with character 1 liner / new class?
+//    vector<ofImage> picture;
     int currentCharacterIndex;
     bool finished;
     bool has_started;
