@@ -1,41 +1,35 @@
 #pragma once
-#include "ofMain.h"
 
-// ---------------------------------------------
-class testApp : public ofBaseApp, public ofThread {
-	
-public:
-    
-    void setup();
-    void update();
-    void draw();
-    void exit();
+#include "ofMain.h"
+#include "ofxVoiceSynthesizer.h"
+#include "scene.h"
+#include "character.h"
+
+class testApp : public ofBaseApp{
+
+	public:
+
+		void setup();
+		void update();
+		void draw();
 		
-    void threadedFunction();
-    
 		void keyPressed(int key);
 		void keyReleased(int key);
-		void mouseMoved(int x, int y);
+		void mouseMoved(int x, int y );
 		void mouseDragged(int x, int y, int button);
 		void mousePressed(int x, int y, int button);
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
+		void gotMessage(ofMessage msg);		
     
-    ofTrueTypeFont font;
+        void playScene();
+        void nextScene();
     
-    vector<string> words;
-    vector<string> wordQueue;
-    vector<string> actors;
-
-    int wordQueueIndex;
-    int actorIndex;
-    bool pause;
-    
-    int step;
-    
-    bool bRandomVoice;
-    string voice;
-    
+        vector<Scene> scenes;
+        ofxVoiceSynthesizer synth;
+        bool movieOver;
+        bool begin;
+        int currentSceneIndex;
 };
+

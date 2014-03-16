@@ -5,13 +5,18 @@
 //  Created by Clay Ewing on 3/16/14.
 //
 //
+#ifndef __CHARACTER_H_INCLUDED__
+#define __CHARACTER_H_INCLUDED__
 
 #include "ofMain.h"
 
 class Character {
     
 public:
-    void talk();
+    float interest;
+    string line;
     string name;
-    vector<string>;
+    bool finished;
 };
+
+#endif

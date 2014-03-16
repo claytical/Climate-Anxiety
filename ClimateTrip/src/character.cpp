@@ -8,7 +8,3 @@
 
 #include "character.h"
 
-void Character::talk() {
-    
-    
-}
