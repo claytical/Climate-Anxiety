@@ -13,13 +13,13 @@ void testApp::setup(){
         ofLogNotice() << voices[i];
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 6; i++) {
         Scene s;
         ofImage img;
         img.loadImage(ofToString(i) + ".png");
         s.create(img, i);
         vector<Character> characters;
-        for (int j = 0; j < 3; j++) {
+        for (int j = 0; j < 6; j++) {
             switch (j) {
                 case 0:
                     s.newCharacter("Bruce", "This is Bruce and I am talking in scene " + ofToString(i));
@@ -53,7 +53,11 @@ void testApp::draw(){
     if (!movieOver) {
         playScene();
         if (!synth.isSpeaking() && scenes[currentSceneIndex].getCharacterID() == 0 && !begin) {
-            nextScene();
+            //erase the scene that was just playing
+            scenes.erase(scenes.begin() + currentSceneIndex);
+            //play a random scene
+            randomUnplayedScene();
+            //nextScene();
         }
         if (currentSceneIndex >= scenes.size()) {
             movieOver = true;
@@ -68,6 +72,17 @@ void testApp::nextScene() {
     cout << "Advancing Scenes" << endl;
     
 }
+
+void testApp::randomUnplayedScene() {
+    scenes.erase(scenes.begin() + currentSceneIndex);
+    currentSceneIndex = int(ofRandom(scenes.size()));
+//    if (scenes[currentSceneIndex].finished) {
+//        randomUnplayedScene();
+//    }
+    scenes[currentSceneIndex].has_started = true;
+
+}
+
 void testApp::playScene() {
     scenes[currentSceneIndex].display();
     if (scenes[currentSceneIndex].has_started) {

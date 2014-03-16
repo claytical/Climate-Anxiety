@@ -25,6 +25,7 @@ class testApp : public ofBaseApp{
     
         void playScene();
         void nextScene();
+        void randomUnplayedScene();
     
         vector<Scene> scenes;
         ofxVoiceSynthesizer synth;
