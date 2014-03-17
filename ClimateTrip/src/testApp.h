@@ -3,7 +3,13 @@
 #include "ofMain.h"
 #include "ofxVoiceSynthesizer.h"
 #include "scene.h"
+#include "series.h"
 #include "character.h"
+#include "thought.h"
+#define WATER       0
+#define EARTH       1
+#define AIR         2
+
 
 class testApp : public ofBaseApp{
 
@@ -21,16 +27,29 @@ class testApp : public ofBaseApp{
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
+        void loadDialogue();
 		void gotMessage(ofMessage msg);		
+        void nextSeriesBasedOnThoughts();
+        void switchVoice();
+        int randomUninterestingTopic(int interestedTopic);
+        int randomThoughtIndex(int topic);
     
-        void playScene();
-        void nextScene();
-        void randomUnplayedScene();
     
-        vector<Scene> scenes;
+    //thought based architecture
+    vector<Thought> thoughts[3];
+    Series series;
+    ofImage images[3][6];
+    
+    
+    
+    //true for all
         ofxVoiceSynthesizer synth;
+       // ofxVoiceSynthesizer synths[3];
         bool movieOver;
         bool begin;
+        bool firstLine;
+        bool lastLine;
         int currentSceneIndex;
+        int currentSynthIndex;
 };
 
