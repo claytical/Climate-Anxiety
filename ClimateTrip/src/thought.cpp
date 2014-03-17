@@ -7,8 +7,10 @@
 //
 
 #include "thought.h"
-void Thought::create(ofImage img, string l, int t, int it) {
+void Thought::create(ofImage img, ofSoundPlayer s, string l, int t, int it) {
     image = img;
+    sound = s;
+    s.setLoop(true);
     line = l;
     topic = t;
     iter = it;

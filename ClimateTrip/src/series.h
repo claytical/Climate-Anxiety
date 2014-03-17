@@ -25,6 +25,7 @@ public:
     void reset();
     void gaugeInterest(float num);
     void display();
+    void play();
     bool nextThought();
     void newThought();
 

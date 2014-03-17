@@ -24,11 +24,17 @@ void testApp::setup(){
 void testApp::introduction() {
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     synth.speak("Welcome to Climate Anxiety Trip");
-    introducingTrip = true;
+//    introducingTrip = true;
+    tripState = TRIP_STATE_INTRODUCTION;
+}
+
+void testApp::outro() {
+    synth.setVoice("com.apple.speech.synthesis.voice.Fred");
+    synth.speak("Goodbye");
+    tripState = TRIP_STATE_OUTRO;
 }
 void testApp::startTrip() {
-    movieOver = false;
-    begin = false;
+
     firstLine = true;
     currentSceneIndex = 0;
     loadDialogue();
@@ -40,12 +46,13 @@ void testApp::startTrip() {
     thoughts[WATER].erase(thoughts[WATER].begin());
     thoughts[EARTH].erase(thoughts[EARTH].begin());
     thoughts[AIR].erase(thoughts[AIR].begin());
-    
+    tripState = TRIP_STATE_PLAYING;
 }
 
 void testApp::loadDialogue() {
     Thought thought;
-    
+    //WATER SOUND
+    sounds[WATER].loadSound("1.wav");
     //WATER IMAGES
     images[WATER][0].loadImage("water0.jpg");
     images[WATER][1].loadImage("water1.jpg");
@@ -55,26 +62,28 @@ void testApp::loadDialogue() {
     images[WATER][5].loadImage("water5.jpg");
     
     //WATER THOUGHTS
-    thought.create(images[WATER][0],  "I am holding so much heat beneath my vast surface, you can barely see it. [[slnc 400]] I am the ocean.", WATER, 1);
+    thought.create(images[WATER][0], sounds[WATER],  "I am holding so much heat beneath my vast surface, you can barely see it. [[slnc 400]] I am the ocean.", WATER, 1);
     thoughts[WATER].push_back(thought);
-    thought.create(images[WATER][1],  "I am unleashing my heated frustration as tumultuous surf and currents. [[slnc 400]] I am the ocean.", WATER, 2);
+    thought.create(images[WATER][1], sounds[WATER],  "I am unleashing my heated frustration as tumultuous surf and currents. [[slnc 400]] I am the ocean.", WATER, 2);
     thoughts[WATER].push_back(thought);
-    thought.create(images[WATER][2],  "Carbon dioxide is forced into me, I'm acidified, the life within me is dying. [[slnc 400]] I am the ocean.", WATER, 3);
-    
-    thoughts[WATER].push_back(thought);
-    
-    thought.create(images[WATER][3],  "My integrity is upheld by valiant sheets of ice, yet they are slipping away, crashing down and melting into me. I am swelling, [[slnc 400]] I am the ocean.", WATER, 4);
+    thought.create(images[WATER][2], sounds[WATER],  "Carbon dioxide is forced into me, I'm acidified, the life within me is dying. [[slnc 400]] I am the ocean.", WATER, 3);
     
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][4],  "I have trapped polluting gases within my ice, yet the melting releases more my gaseous enemy uncontrollably. I am the ice, [[slnc 400]] I am the ocean.", WATER, 5);
+    thought.create(images[WATER][3], sounds[WATER],  "My integrity is upheld by valiant sheets of ice, yet they are slipping away, crashing down and melting into me. I am swelling, [[slnc 400]] I am the ocean.", WATER, 4);
+    
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][5],  "I have gone through changes like this before, but never this extreme. I am scared, [[slnc 400]] I am the ocean.", WATER, 6);
+    thought.create(images[WATER][4], sounds[WATER],  "I have trapped polluting gases within my ice, yet the melting releases more my gaseous enemy uncontrollably. I am the ice, [[slnc 400]] I am the ocean.", WATER, 5);
+    thoughts[WATER].push_back(thought);
+    
+    thought.create(images[WATER][5], sounds[WATER],  "I have gone through changes like this before, but never this extreme. I am scared, [[slnc 400]] I am the ocean.", WATER, 6);
     thoughts[WATER].push_back(thought);
     
     
-    
+    //AIR SOUND
+    sounds[AIR].loadSound("2.wav");
+
     //AIR IMAGES
     images[AIR][0].loadImage("air0.jpg");
     images[AIR][1].loadImage("air1.jpg");
@@ -85,27 +94,31 @@ void testApp::loadDialogue() {
     
     //AIR THOUGHTS
     
-    thought.create(images[AIR][0],  "I am trying to breathe, but my airways feel obstructed, there is more greenhouse gases than I have ever experienced before. It is suffocating, [[slnc 400]] I am the atmosphere.", AIR, 1);
+    thought.create(images[AIR][0],  sounds[AIR], "I am trying to breathe, but my airways feel obstructed, there is more greenhouse gases than I have ever experienced before. It is suffocating, [[slnc 400]] I am the atmosphere.", AIR, 1);
     thoughts[AIR].push_back(thought);
     
-    thought.create(images[AIR][1],  "My environment has always been constantly changing, and I was in rhythm with it for the past 650,000 years, but since 1950 things I have not been able to adjust. I don’t know what is going to happen, this is new for me, [[slnc 400]] I am the atmosphere.", AIR, 2);
+    thought.create(images[AIR][1], sounds[AIR], "My environment has always been constantly changing, and I was in rhythm with it for the past 650,000 years, but since 1950 things I have not been able to adjust. I don’t know what is going to happen, this is new for me, [[slnc 400]] I am the atmosphere.", AIR, 2);
     thoughts[AIR].push_back(thought);
     
-    thought.create(images[AIR][2],  "The burning of fossil fuels changes my identity and heat gets trapped beneath my surface. You have already burned half of all fossil fuels available to you. If you burn the rest you will put more than 1000 tonnes of carbon into me. [[slnc 400]] I am the atmosphere.", AIR, 3);
-    thoughts[AIR].push_back(thought);
-    
-    
-    thought.create(images[AIR][3],  "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth and take us into uncharted territory. Nobody, including me, knows what will happen then. [[slnc 400]]I am the Atmosphere!", AIR, 4);
+    thought.create(images[AIR][2], sounds[AIR], "The burning of fossil fuels changes my identity and heat gets trapped beneath my surface. You have already burned half of all fossil fuels available to you. If you burn the rest you will put more than 1000 tonnes of carbon into me. [[slnc 400]] I am the atmosphere.", AIR, 3);
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][4],  "I will continue to make hot days hotter and cold days colder, I will throw more storms at you and with more intensity than before. Yet the desert will not see these storms and it will become thirsty. [[slnc 400]]I am the Atmosphere!", AIR, 5);
+    thought.create(images[AIR][3], sounds[AIR], "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth and take us into uncharted territory. Nobody, including me, knows what will happen then. [[slnc 400]]I am the Atmosphere!", AIR, 4);
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][5],  "If we stay on the path we’re on, I will continue to heat up. I have become an experiment, I hold your only home. I am nervous.[[slnc 400]] I am the atmosphere. ", AIR, 6);
+    thought.create(images[AIR][4], sounds[AIR], "I will continue to make hot days hotter and cold days colder, I will throw more storms at you and with more intensity than before. Yet the desert will not see these storms and it will become thirsty. [[slnc 400]]I am the Atmosphere!", AIR, 5);
     thoughts[AIR].push_back(thought);
     
+    
+    thought.create(images[AIR][5], sounds[AIR], "If we stay on the path we’re on, I will continue to heat up. I have become an experiment, I hold your only home. I am nervous.[[slnc 400]] I am the atmosphere. ", AIR, 6);
+    thoughts[AIR].push_back(thought);
+   
+    //EARTH SOUND
+    sounds[EARTH].loadSound("3.wav");
+
+
     //EARTH IMAGES - not in directory yet
     images[EARTH][0].loadImage("earth0.jpg");
     images[EARTH][1].loadImage("earth1.jpg");
@@ -117,110 +130,107 @@ void testApp::loadDialogue() {
     
     //EARTH THOUGHTS
     
-    thought.create(images[EARTH][0], "I have seen the greatest temperature increase, I try to reflect radiative heat but something is not letting it out and I am soaking more in than I can handle. I am uncomfortable. [[slnc 400]] I am the Earth.", EARTH, 1);
+    thought.create(images[EARTH][0], sounds[EARTH],"I have seen the greatest temperature increase, I try to reflect radiative heat but something is not letting it out and I am soaking more in than I can handle. I am uncomfortable. [[slnc 400]] I am the Earth.", EARTH, 1);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][1], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases.[[slnc 400]] I am the Earth.", EARTH, 2);
+    thought.create(images[EARTH][1], sounds[EARTH], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases.[[slnc 400]] I am the Earth.", EARTH, 2);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][2], "The extreme weather is changing my soil. It is will become more difficult to keep up with my changing weather and agriculture not be as productive. I am confused. [[slnc 400]]I am the Earth.", EARTH, 3);
+    thought.create(images[EARTH][2], sounds[EARTH], "The extreme weather is changing my soil. It is will become more difficult to keep up with my changing weather and agriculture not be as productive. I am confused. [[slnc 400]]I am the Earth.", EARTH, 3);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][3], "I started heating up at the onset of the industrial revolution and increased burning of coal. During the 1960’s my temperature rose faster and is continuing to rise, I don’t think this was from the increased burning of marijuana. I am not chill. [[slnc 400]]I am the Earth.", EARTH, 4);
+    thought.create(images[EARTH][3], sounds[EARTH], "I started heating up at the onset of the industrial revolution and increased burning of coal. During the 1960’s my temperature rose faster and is continuing to rise, I don’t think this was from the increased burning of marijuana. I am not chill. [[slnc 400]]I am the Earth.", EARTH, 4);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][4], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases. [[slnc 400]]I am the Earth.", EARTH, 5);
+    thought.create(images[EARTH][4], sounds[EARTH], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases. [[slnc 400]]I am the Earth.", EARTH, 5);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][5], "Through climate change I had to let go of more than 20% of animal species, which will never be able to return. I am living. [[slnc 400]] I am the Earth!", EARTH, 6);
+    thought.create(images[EARTH][5], sounds[EARTH], "Through climate change I had to let go of more than 20% of animal species, which will never be able to return. I am living. [[slnc 400]] I am the Earth!", EARTH, 6);
     thoughts[EARTH].push_back(thought);
-
-    //AUTOMATIC
-    /*
-     for (int i = 0; i < 4; i++) {
-     images[WATER][i].loadImage("water" + ofToString(i) + ".jpg");
-     images[EARTH][i].loadImage("earth" + ofToString(i) + ".jpg");
-     images[AIR][i].loadImage("air" + ofToString(i) + ".jpg");
-     }
-     for (int i = 0; i < 4; i++) {
-     Thought tmpThought;
-     tmpThought.create(images[WATER][i],  "Line " + ofToString(i) + " of water", WATER, 1);
-     thoughts[WATER].push_back(tmpThought);
-     tmpThought.create(images[EARTH][i],  "Line " + ofToString(i) + " of earth", EARTH, 1);
-     thoughts[EARTH].push_back(tmpThought);
-     tmpThought.create(images[AIR][i],  "Line " + ofToString(i) + " of air", AIR, 1);
-     thoughts[AIR].push_back(tmpThought);
-     
-     }
-     */
-
-    
-    
+  
     
 }
 //--------------------------------------------------------------
 void testApp::update(){
-    if (!movieOver) {
-        if (synth.isSpeaking()) {
-            //add to aggregate interest level
-            series.gaugeInterest(ofRandom(2));
-        }
-    }
-
-        if (introducingTrip) {
+    
+    
+    switch (tripState) {
+        case TRIP_STATE_WAITING_FOR_VIEWER:
+            break;
+        case TRIP_STATE_INTRODUCTION:
             if (!synth.isSpeaking()) {
-                introducingTrip = false;
                 startTrip();
             }
-        }
-    
+            break;
+        case TRIP_STATE_PLAYING:
+            if (synth.isSpeaking()) {
+                //add to aggregate interest level
+                series.gaugeInterest(ofRandom(2));
+            }
+            break;
+        case TRIP_STATE_OUTRO:
+            if (!synth.isSpeaking()) {
+                tripState = TRIP_STATE_WAITING_FOR_VIEWER;
+            }
+            break;
+    }
+
+
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    ofSetColor(255, 255, 255);
-//    ofDrawBitmapString("scene #" + ofToString(currentSceneIndex),20,20);
-    if (!movieOver) {
-        series.display();
-        currentSynthIndex = series.getCurrentTopic();
-        if (firstLine) {
-            if (!synth.isSpeaking()) {
-                switchVoice();
-                synth.speak(series.getCurrentThought());
-            }
-            firstLine = false;
-        }
-        else {
-            if (!synth.isSpeaking()) {
-                if (series.nextThought()) {
-                    switchVoice();
-                    synth.speak(series.getCurrentThought());
-                }
-                else {
-                    //generate new series
-                    if (lastLine) {
-                        movieOver = true;
-                    }
-                    else {
-                        nextSeriesBasedOnThoughts();
-                        firstLine = true;
-                    }
-                }
-            }
-        
-        }
-        
-    }
-    else {
-        
-        if (!introducingTrip) {
+    
+    switch (tripState) {
+        case TRIP_STATE_WAITING_FOR_VIEWER:
             ofSetColor(255, 255, 255);
             text.drawString("Place Your Hands on the Globes to Start", 20, ofGetHeight()/2);
-        }
-        else {
+
+            break;
+        case TRIP_STATE_INTRODUCTION:
             ofSetColor(255, 255, 255);
             text.drawString("This is an introduction", 20, ofGetHeight()/2);
+            break;
+        case TRIP_STATE_PLAYING:
+            series.display();
+            currentSynthIndex = series.getCurrentTopic();
+            if (firstLine) {
+                if (!synth.isSpeaking()) {
+                    switchVoice();
+                    synth.speak(series.getCurrentThought());
+                    series.play();
+                }
+                firstLine = false;
+            }
+            else {
+                if (!synth.isSpeaking()) {
+                    if (series.nextThought()) {
+                        switchVoice();
+                        synth.speak(series.getCurrentThought());
+                    }
+                    else {
+                        //generate new series
+                        if (lastLine) {
+                            outro();
+                        }
+                        else {
+                            nextSeriesBasedOnThoughts();
+                            firstLine = true;
+                        }
+                    }
+                }
+                
+            }
+
             
-        }
+            
+            break;
+        case TRIP_STATE_OUTRO:
+            ofSetColor(255, 255, 255);
+            text.drawString("This is the outro", 20, ofGetHeight()/2);
+
+            break;
     }
 
-   
+    
 }
+
+
 
 int testApp::randomThoughtIndex(int type) {
     int selectedIndex;
@@ -252,7 +262,7 @@ void testApp::nextSeriesBasedOnThoughts() {
             highestInterestIndex = i;
         }
     }
-        series.reset();
+    series.reset();
     cout << "Adding two of topic " << highestInterestTopic << endl;
     cout << "That topic has " << thoughts[highestInterestTopic].size() << " thoughts left" << endl;
     if (thoughts[highestInterestTopic].size() <= 0) {
@@ -312,14 +322,29 @@ void testApp::switchVoice() {
 }
 //--------------------------------------------------------------
 void testApp::keyPressed  (int key){
+    switch (tripState) {
+        case TRIP_STATE_WAITING_FOR_VIEWER:
+            if (key == ' ' && movieOver) {
+                introduction();
+            }
+            break;
+        case TRIP_STATE_INTRODUCTION:
+            break;
+        case TRIP_STATE_PLAYING:
+            break;
+        case TRIP_STATE_OUTRO:
+            break;
+    }
 //    scenes[currentSceneIndex].start();
 //    begin = false;
+/*
     if (key == ' ' && movieOver) {
         introduction();
 //        movieOver = false;
 //        startTrip();
     }
-}
+*/
+ }
 
 //--------------------------------------------------------------
 void testApp::keyReleased(int key){

@@ -10,6 +10,11 @@
 #define EARTH       1
 #define AIR         2
 
+#define TRIP_STATE_WAITING_FOR_VIEWER   0
+#define TRIP_STATE_INTRODUCTION         1
+#define TRIP_STATE_PLAYING              2
+#define TRIP_STATE_OUTRO                3
+
 
 class testApp : public ofBaseApp{
 
@@ -38,11 +43,13 @@ class testApp : public ofBaseApp{
         int randomThoughtIndex(int topic);
     
         ofTrueTypeFont text;
+        int tripState;
     
-    //thought based architecture
-    vector<Thought> thoughts[3];
-    Series series;
-    ofImage images[3][6];
+        //thought based architecture
+        vector<Thought> thoughts[3];
+        Series series;
+        ofImage images[3][6];
+        ofSoundPlayer sounds[3];
     
     
     

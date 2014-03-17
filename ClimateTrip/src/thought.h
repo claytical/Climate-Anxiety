@@ -20,7 +20,7 @@
 class Thought {
     
 public:
-    void create(ofImage img, string l, int t, int iter);
+    void create(ofImage img, ofSoundPlayer s, string l, int t, int iter);
     void gaugeInterest(float num);
     void move();
     void display();
