@@ -31,9 +31,13 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);		
         void nextSeriesBasedOnThoughts();
         void switchVoice();
+        void startTrip();
+        void introduction();
+        void outro();
         int randomUninterestingTopic(int interestedTopic);
         int randomThoughtIndex(int topic);
     
+        ofTrueTypeFont text;
     
     //thought based architecture
     vector<Thought> thoughts[3];
@@ -46,6 +50,8 @@ class testApp : public ofBaseApp{
         ofxVoiceSynthesizer synth;
        // ofxVoiceSynthesizer synths[3];
         bool movieOver;
+        bool outroducingTrip;
+        bool introducingTrip;
         bool begin;
         bool firstLine;
         bool lastLine;

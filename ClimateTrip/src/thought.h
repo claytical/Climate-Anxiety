@@ -14,15 +14,25 @@
 #define WATER       0
 #define EARTH       1
 #define AIR         2
+#define EFFECT_MOVE 1
+#define EFFECT_ZOOM 2
 
 class Thought {
     
 public:
     void create(ofImage img, string l, int t, int iter);
     void gaugeInterest(float num);
+    void move();
+    void display();
     int topic;
     int iter;
+    int effect;
+    float scale;
+    float moveX;
+    float moveY;
+    ofPoint position;
     ofImage image;
+    ofSoundPlayer sound;
     string line;
     string name;
     float interest;

@@ -20,7 +20,8 @@ void Series::gaugeInterest(float num) {
 }
 
 void Series::display() {
-    thoughts[currentThoughtIndex].image.draw(0, 0);
+    thoughts[currentThoughtIndex].display();
+    thoughts[currentThoughtIndex].move();
 }
 void Series::reset() {
     thoughts.clear();

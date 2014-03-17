@@ -4,32 +4,45 @@
 void testApp::setup(){
     cout << "WIDTH: " << ofGetWidth();
     cout << "HEIGHT: " << ofGetHeight();
+    text.loadFont("joystix.ttf", 32);
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
+    //debugging
+    vector<string> voices = ofxVoiceSynthesizer::getVoices();
+    synth.setup("com.apple.speech.synthesis.voice.Vicki");
+
+    for(int i = 0; i < voices.size(); i++) {
+        ofLogNotice() << voices[i];
+    }
+
+    movieOver = true;
+    introducingTrip = false;
+    outroducingTrip = false;
+
+}
+
+void testApp::introduction() {
+    synth.setVoice("com.apple.speech.synthesis.voice.Fred");
+    synth.speak("Welcome to Climate Anxiety Trip");
+    introducingTrip = true;
+}
+void testApp::startTrip() {
     movieOver = false;
     begin = false;
     firstLine = true;
     currentSceneIndex = 0;
-    //-- let's see the voices available in the system
-    vector<string> voices = ofxVoiceSynthesizer::getVoices();
-    for(int i = 0; i < voices.size(); i++) {
-        ofLogNotice() << voices[i];
-    }
     loadDialogue();
     series.reset();
-    synth.setup("com.apple.speech.synthesis.voice.Vicki");
-   // synth[WATER].setup("com.apple.speech.synthesis.voice.Bubbles");
-   // synth[EARTH].setup("com.apple.speech.synthesis.voice.Vicki");
-   // synth[AIR].setup("com.apple.speech.synthesis.voice.Ralph");
-
+    
     series.add(thoughts[WATER][0]);
     series.add(thoughts[AIR][0]);
     series.add(thoughts[EARTH][0]);
     thoughts[WATER].erase(thoughts[WATER].begin());
     thoughts[EARTH].erase(thoughts[EARTH].begin());
     thoughts[AIR].erase(thoughts[AIR].begin());
-
+    
 }
+
 void testApp::loadDialogue() {
     Thought thought;
     
@@ -42,22 +55,22 @@ void testApp::loadDialogue() {
     images[WATER][5].loadImage("water5.jpg");
     
     //WATER THOUGHTS
-    thought.create(images[WATER][0],  "I am holding so much heat beneath my vast surface, you can barely see it. I am the ocean.", WATER, 1);
+    thought.create(images[WATER][0],  "I am holding so much heat beneath my vast surface, you can barely see it. [[slnc 400]] I am the ocean.", WATER, 1);
     thoughts[WATER].push_back(thought);
-    thought.create(images[WATER][1],  "I am unleashing my heated frustration as tumultuous surf and currents. I am the ocean.", WATER, 2);
+    thought.create(images[WATER][1],  "I am unleashing my heated frustration as tumultuous surf and currents. [[slnc 400]] I am the ocean.", WATER, 2);
     thoughts[WATER].push_back(thought);
-    thought.create(images[WATER][2],  "Carbon dioxide is forced into me, I'm acidified, the life within me is dying. I am the ocean.", WATER, 3);
+    thought.create(images[WATER][2],  "Carbon dioxide is forced into me, I'm acidified, the life within me is dying. [[slnc 400]] I am the ocean.", WATER, 3);
     
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][3],  "My integrity is upheld by valiant sheets of ice, yet they are slipping away, crashing down and melting into me. I am swelling, I am the ocean.", WATER, 4);
+    thought.create(images[WATER][3],  "My integrity is upheld by valiant sheets of ice, yet they are slipping away, crashing down and melting into me. I am swelling, [[slnc 400]] I am the ocean.", WATER, 4);
     
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][4],  "I have trapped polluting gases within my ice, yet the melting releases more my gaseous enemy uncontrollably. I am the ice, I am the ocean.", WATER, 5);
+    thought.create(images[WATER][4],  "I have trapped polluting gases within my ice, yet the melting releases more my gaseous enemy uncontrollably. I am the ice, [[slnc 400]] I am the ocean.", WATER, 5);
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][5],  "I have gone through changes like this before, but never this extreme. I am scared. I am the ocean.", WATER, 6);
+    thought.create(images[WATER][5],  "I have gone through changes like this before, but never this extreme. I am scared, [[slnc 400]] I am the ocean.", WATER, 6);
     thoughts[WATER].push_back(thought);
     
     
@@ -72,25 +85,25 @@ void testApp::loadDialogue() {
     
     //AIR THOUGHTS
     
-    thought.create(images[AIR][0],  "There is unequivocal evidence that shows atmospheric concentration of greenhouse gasses has increased over the past few centuries.", AIR, 1);
+    thought.create(images[AIR][0],  "I am trying to breathe, but my airways feel obstructed, there is more greenhouse gases than I have ever experienced before. It is suffocating, [[slnc 400]] I am the atmosphere.", AIR, 1);
     thoughts[AIR].push_back(thought);
     
-    thought.create(images[AIR][1],  "For the past 650,000 years the atmospheric carbon dioxide levels have stayed below a specific threshold, which was crossed in 1950. It continues to increase at faster rates. This brings us into uncharted territory.", AIR, 2);
+    thought.create(images[AIR][1],  "My environment has always been constantly changing, and I was in rhythm with it for the past 650,000 years, but since 1950 things I have not been able to adjust. I donÕt know what is going to happen, this is new for me, [[slnc 400]] I am the atmosphere.", AIR, 2);
     thoughts[AIR].push_back(thought);
     
-    thought.create(images[AIR][2],  "World leaders have agreed to limit the warming to 2 degrees Celsius. To even have a chance to achieve we have to cut down our dependence on fossil fuels. We are limited to 1000 billion tonne of carbon , but have already released 560 billions tonnes. With increasing economic productivity it is unlikely that we will be able to stay under this limit.", AIR, 3);
-    thoughts[AIR].push_back(thought);
-    
-    
-    thought.create(images[AIR][3],  "Even if we reduce atmospheric greenhouse gasses to zero today temperature is expected to by 2 degree Celsius and bring us into uncharted territory.", AIR, 4);
+    thought.create(images[AIR][2],  "The burning of fossil fuels changes my identity and heat gets trapped beneath my surface. You have already burned half of all fossil fuels available to you. If you burn the rest you will put more than 1000 tonnes of carbon into me. [[slnc 400]] I am the atmosphere.", AIR, 3);
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][4],  "Weather is expected to become more extreme, with hot days becoming hotter and cold days becoming colder. Storms will hit more frequently and with more intensity. Deserts will experience longer and more devastating dry spells.", AIR, 5);
+    thought.create(images[AIR][3],  "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth and take us into uncharted territory. Nobody, including me, knows what will happen then. [[slnc 400]]I am the Atmosphere!", AIR, 4);
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][5],  "Only radical emission cuts would prevent us from exceeding our limit by 2050. We are on the path to exceed this limit just before then.  We are experimenting with the only home we have.  By not acting sooner we have selected the wait and see approach, and each day we fail to act the more extreme this experiment become.", AIR, 6);
+    thought.create(images[AIR][4],  "I will continue to make hot days hotter and cold days colder, I will throw more storms at you and with more intensity than before. Yet the desert will not see these storms and it will become thirsty. [[slnc 400]]I am the Atmosphere!", AIR, 5);
+    thoughts[AIR].push_back(thought);
+    
+    
+    thought.create(images[AIR][5],  "If we stay on the path weÕre on, I will continue to heat up. I have become an experiment, I hold your only home. I am nervous.[[slnc 400]] I am the atmosphere. ", AIR, 6);
     thoughts[AIR].push_back(thought);
     
     //EARTH IMAGES - not in directory yet
@@ -104,17 +117,17 @@ void testApp::loadDialogue() {
     
     //EARTH THOUGHTS
     
-    thought.create(images[EARTH][0], "As we decrease our usage of oil and fossil fuels international politics will be disturbed and potential friction and animosity will occur.", EARTH, 1);
+    thought.create(images[EARTH][0], "I have seen the greatest temperature increase, I try to reflect radiative heat but something is not letting it out and I am soaking more in than I can handle. I am uncomfortable. [[slnc 400]] I am the Earth.", EARTH, 1);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][1], "Diseases such as malaria are spreading due to the increasing tropical climate. Increased air pollutants correlates with increased respiratory diseases.", EARTH, 2);
+    thought.create(images[EARTH][1], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases.[[slnc 400]] I am the Earth.", EARTH, 2);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][2], "Agriculture may not be able to keep up with the climate change and extreme weather patterns, decreasing productivity", EARTH, 3);
+    thought.create(images[EARTH][2], "The extreme weather is changing my soil. It is will become more difficult to keep up with my changing weather and agriculture not be as productive. I am confused. [[slnc 400]]I am the Earth.", EARTH, 3);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][3], "Within several decades of CO2 emissions, about a third to half of an initial pulse of anthropogenic CO2 goes into the land and ocean, while the rest stays in the atmosphere", EARTH, 4);
+    thought.create(images[EARTH][3], "I started heating up at the onset of the industrial revolution and increased burning of coal. During the 1960Õs my temperature rose faster and is continuing to rise, I donÕt think this was from the increased burning of marijuana. I am not chill. [[slnc 400]]I am the Earth.", EARTH, 4);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][4], "Land and surface air temperature has increased since the industrial revolution in 19th century, and sharply increased since 1961.", EARTH, 5);
+    thought.create(images[EARTH][4], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases. [[slnc 400]]I am the Earth.", EARTH, 5);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][5], "Climate change threatens 20-30% of plant and animal species with extinction. Climate change has been estimated to be a major driver of biodiversity loss in cool conifer forests, savannas, mediterranean-climate systems, tropical forests, in the Arctic tundra, and in coral reefs. 20 to 30% of plant and animal species are at increased risk of extinction as the global temperature warms beyond 2 degrees celsuis.", EARTH, 6);
+    thought.create(images[EARTH][5], "Through climate change I had to let go of more than 20% of animal species, which will never be able to return. I am living. [[slnc 400]] I am the Earth!", EARTH, 6);
     thoughts[EARTH].push_back(thought);
 
     //AUTOMATIC
@@ -148,6 +161,14 @@ void testApp::update(){
             series.gaugeInterest(ofRandom(2));
         }
     }
+
+        if (introducingTrip) {
+            if (!synth.isSpeaking()) {
+                introducingTrip = false;
+                startTrip();
+            }
+        }
+    
 }
 
 //--------------------------------------------------------------
@@ -185,6 +206,19 @@ void testApp::draw(){
         }
         
     }
+    else {
+        
+        if (!introducingTrip) {
+            ofSetColor(255, 255, 255);
+            text.drawString("Place Your Hands on the Globes to Start", 20, ofGetHeight()/2);
+        }
+        else {
+            ofSetColor(255, 255, 255);
+            text.drawString("This is an introduction", 20, ofGetHeight()/2);
+            
+        }
+    }
+
    
 }
 
@@ -268,7 +302,7 @@ void testApp::switchVoice() {
             synth.setVoice("com.apple.speech.synthesis.voice.Vicki");
             break;
         case EARTH:
-            synth.setVoice("com.apple.speech.synthesis.voice.Ralph");
+            synth.setVoice("com.apple.speech.synthesis.voice.Victoria");
             break;
         case AIR:
             synth.setVoice("com.apple.speech.synthesis.voice.Alex");
@@ -279,7 +313,12 @@ void testApp::switchVoice() {
 //--------------------------------------------------------------
 void testApp::keyPressed  (int key){
 //    scenes[currentSceneIndex].start();
-    begin = false;
+//    begin = false;
+    if (key == ' ' && movieOver) {
+        introduction();
+//        movieOver = false;
+//        startTrip();
+    }
 }
 
 //--------------------------------------------------------------
