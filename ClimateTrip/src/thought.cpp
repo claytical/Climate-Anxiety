@@ -53,7 +53,7 @@ void Thought::move() {
         alpha+= alphaDirection;
     }
     else {
-        alpha *= .997;
+        alpha *= .999;
         
     }
 

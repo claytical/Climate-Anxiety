@@ -71,8 +71,8 @@ class testApp : public ofBaseApp{
         float introSoundFadeOut;
         ofSoundPlayer outroSound;
         string viewerImage;
+        string viewerName;
         string tweets[3][6];
-    
     
     
     //true for all
@@ -88,9 +88,11 @@ class testApp : public ofBaseApp{
     //webcam
     
     ofVideoGrabber 		camera;
-    unsigned char * 	videoInverted;
-    ofTexture			videoTexture;
     ofImage             viewer;
+    
+    //debugging features
+    
+    bool debug;
 
 };
 

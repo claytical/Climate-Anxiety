@@ -4,8 +4,8 @@
 void testApp::setup(){
 //    cout << "WIDTH: " << ofGetWidth();
 //    cout << "HEIGHT: " << ofGetHeight();
+    debug = true;
     text.loadFont("joystix.ttf", 32);
-
     ofBackground(0);
 	ofSetVerticalSync(true);
     //debugging
@@ -14,7 +14,7 @@ void testApp::setup(){
     usingRandomValues = false;
     introSound.loadSound("intro.wav");
     outroSound.loadSound("end.wav");
-    outroSound.setVolume(.5);
+    outroSound.setVolume(.2);
     heartImage.loadImage("heart.png");
     sounds[WATER].loadSound("water.aiff");
     sounds[AIR].loadSound("air.aiff");
@@ -36,9 +36,16 @@ void testApp::setup(){
     }
     
 	receiver.setup(PORT);
-    camera.setDeviceID(0);
+    if (camera.listDevices().size() > 1) {
+        camera.setDeviceID(1);
+        
+    }
+    else {
+        camera.setDeviceID(0);
+    }
 	camera.setDesiredFrameRate(60);
 	camera.initGrabber(320, 240);
+
 }
 
 void testApp::introduction() {
@@ -57,12 +64,14 @@ void testApp::introduction() {
 void testApp::flash() {
     ofSetColor(255,255,255, ofMap(ofGetElapsedTimef(), flashTime - .5, flashTime, 255, 0));
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
+    if (ofGetElapsedTimef() > flashTime - .3) {
+        viewerImage = takePhoto();
+        cout << "Using Image " << viewerImage << endl;
+        tookPhotoWithFlash = true;
+       
+    }
     if (ofGetElapsedTimef() > flashTime) {
         outro();
-    }
-    if (!tookPhotoWithFlash) {
-        viewerImage = takePhoto();
-        tookPhotoWithFlash = true;
     }
 
 }
@@ -73,19 +82,21 @@ void testApp::outro() {
     loadTweets();
     int randomTweet = int(ofRandom(0,5));
     twitterClient.postStatus(tweets[favoriteTopic()][randomTweet], viewerImage);
-    
+    if (viewerName == "this human") {
+        viewerName = "Human";
+    }
     switch (favoriteTopic()) {
         case WATER:
-            synth.speak("Human, I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
+            synth.speak(viewerName + ", I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
             
             break;
         case AIR:
 
-            synth.speak("Human, I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
+            synth.speak(viewerName + ", I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
 
             break;
         case EARTH:
-            synth.speak("Human, I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]]");
+            synth.speak(viewerName + ", I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]]");
             
             
             break;
@@ -97,6 +108,7 @@ void testApp::outro() {
     
 }
 void testApp::startTrip() {
+    viewerName = "this human";
     brainWaveStrength[WATER] = 0;
     brainWaveStrength[AIR] = 0;
     brainWaveStrength[EARTH] = 0;
@@ -114,29 +126,29 @@ void testApp::startTrip() {
 }
 void testApp::loadTweets() {
     
-    tweets[WATER][0] = "this human loves the ocean #StoryMatter";
-    tweets[EARTH][0] = "this human can't get enough of earth #StoryMatter";
-    tweets[AIR][0] = "this human loves the atmosphere #StoryMatter";
+    tweets[WATER][0] = viewerName + " loves the ocean #StoryMatter";
+    tweets[EARTH][0] = viewerName + " can't get enough of earth #StoryMatter";
+    tweets[AIR][0] =  viewerName + " loves the atmosphere #StoryMatter";
 
-    tweets[WATER][1] = "this human enjoys the ocean #StoryMatter";
-    tweets[EARTH][1] = "an earth loving human #StoryMatter";
-    tweets[AIR][1] = "this human can't get enough of the atmosphere #StoryMatter";
+    tweets[WATER][1] = viewerName + " enjoys the ocean #StoryMatter";
+    tweets[EARTH][1] = viewerName + " loves earth #StoryMatter";
+    tweets[AIR][1] = viewerName + " can't get enough of the atmosphere #StoryMatter";
     
-    tweets[WATER][2] = "who loves the ocean? this human. #StoryMatter";
-    tweets[EARTH][2] = "i hear this human hearts earth #StoryMatter";
-    tweets[AIR][2] = "so much love for the atmosphere #StoryMatter";
+    tweets[WATER][2] = "who loves the ocean? " + viewerName+ ". #StoryMatter";
+    tweets[EARTH][2] = "i hear "+viewerName+" hearts earth #StoryMatter";
+    tweets[AIR][2] = "so much love for the atmosphere from " + viewerName+ " #StoryMatter";
     
-    tweets[WATER][3] = "ocean loving human example #" + ofToString(int(ofRandom(99999))) + " #StoryMatter";
-    tweets[EARTH][3] = "the earth loves this human #StoryMatter";
-    tweets[AIR][3] = "this love is out of the atmosphere #StoryMatter";
+    tweets[WATER][3] = viewerName + ". ocean lover example #" + ofToString(int(ofRandom(99999))) + " #StoryMatter";
+    tweets[EARTH][3] = "the earth loves "+ viewerName+ "  #StoryMatter";
+    tweets[AIR][3] = viewerName + "'s love is out of the atmosphere #StoryMatter";
     
-    tweets[WATER][4] = "the ocean is feeling good #StoryMatter";
-    tweets[EARTH][4] = "this earth can contain all of your love #StoryMatter";
-    tweets[AIR][4] = "no need to fear, this human is all about the atmosphere #StoryMatter";
+    tweets[WATER][4] = "the ocean is feeling good thanks to "+viewerName+" #StoryMatter";
+    tweets[EARTH][4] = "this earth can contain all of "+viewerName+"'s love #StoryMatter";
+    tweets[AIR][4] = "no need to fear, "+viewerName+" is all about the atmosphere #StoryMatter";
     
-    tweets[WATER][5] = "oceans, lakes, rivers, creeks, this human loves them all #StoryMatter";
-    tweets[EARTH][5] = "gaia love! #StoryMatter";
-    tweets[AIR][5] = "pure air! pure love! #StoryMatter";
+    tweets[WATER][5] = "oceans, lakes, rivers, creeks, "+viewerName+" loves them all #StoryMatter";
+    tweets[EARTH][5] = viewerName + "! gaia loves you! #StoryMatter";
+    tweets[AIR][5] = viewerName + "! pure air! pure love! #StoryMatter";
 
 }
 void testApp::loadDialogue() {
@@ -163,10 +175,10 @@ void testApp::loadDialogue() {
     
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][4], sounds[WATER],  "I have greenhouse gases trapped within my ice, and the melting releases my gaseous enemy. [[slnc 1000]] I am the ice, [[slnc 350]] I am the ocean. [[slnc 3000]].", WATER, 5);
+    thought.create(images[WATER][4], sounds[WATER],  "I have greenhouse gases trapped within my ice, and the melting releases the gaseous enemy. [[slnc 1000]] I am the ice, [[slnc 350]] I am the ocean. [[slnc 3000]].", WATER, 5);
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][5], sounds[WATER],  "I have have changed size before, [[slnc 500]] but never this extreme. [[slnc 400] I am scared [[slnc 1000]] I am the ocean. [[slnc 3000]]", WATER, 6);
+    thought.create(images[WATER][5], sounds[WATER],  "I have changed size before, [[slnc 500]] but never this extreme. [[slnc 400]] I am scared [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 6);
     thoughts[WATER].push_back(thought);
     
     
@@ -191,7 +203,7 @@ void testApp::loadDialogue() {
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][3], sounds[AIR], "Even if we reduce emissions today  [[slnc 300] I will contain more carbon dioxide and heat than I ever have before. [[slnc 500]] I don’t know what will happen, but it will last thousands of years. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 4);
+    thought.create(images[AIR][3], sounds[AIR], "Even if we reduce emissions today  [[slnc 300] I will contain more carbon dioxide and heat than I ever have before. [[slnc 500]] I don't know what will happen, but it will last thousands of years. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 4);
     thoughts[AIR].push_back(thought);
     
     
@@ -221,9 +233,9 @@ void testApp::loadDialogue() {
     thoughts[EARTH].push_back(thought);
     thought.create(images[EARTH][3], sounds[EARTH], "My temperatures started to rise along with the industrial revolution. [[slnc 500]] Since the 1960's my temperature has risen faster. [[slnc 500]] I am not chill.  [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 4);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][4], sounds[EARTH], "The ice is melting, leaving more of my minerals accessible. [[slnc 500]] People are digging into me to get them  [[slnc 500]] exposing me. [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 5);
+    thought.create(images[EARTH][4], sounds[EARTH], "The ice is melting, showing more of my minerals. [[slnc 500]] People are digging into me to get them  [[slnc 500]] exposing me. [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 5);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][5], sounds[EARTH], "I may lose more than 15 to 37% of all my plant and animal species, [[slnc 1000]] they will never be able to return. [[slnc 500]] I am living too. [[slnc 500]] I am the Earth. [[slnc 3000]]", EARTH, 6);
+    thought.create(images[EARTH][5], sounds[EARTH], "I may lose more than 15 to 37% of all my plant annd animal species, [[slnc 1000]] they will never be able to return. [[slnc 500]] I am living too. [[slnc 500]] I am the Earth! [[slnc 3000]]", EARTH, 6);
     thoughts[EARTH].push_back(thought);
   
     
@@ -232,6 +244,8 @@ void testApp::loadDialogue() {
 void testApp::update(){
     int brainWave = 0;
     bool pulse = false;
+    camera.update();
+
     while(receiver.hasWaitingMessages()){
         // get the next message
         ofxOscMessage m;
@@ -241,10 +255,15 @@ void testApp::update(){
             brainWave = m.getArgAsInt32(0);
 
         }
+        
         if (m.getAddress() == "/pulse") {
             //got pulse, let's go!
             pulse = true;
             
+        }
+        
+        if (m.getAddress() == "/name") {
+            viewerName = m.getArgAsString(0);
         }
         
         
@@ -256,11 +275,6 @@ void testApp::update(){
                 introduction();
             }
             
-            camera.update();
-            
-            if (camera.isFrameNew()){
-            }
-
             break;
         case TRIP_STATE_INTRODUCTION:
             if (!synth.isSpeaking()) {
@@ -295,6 +309,9 @@ void testApp::update(){
             if (!synth.isSpeaking()) {
                 tripState = TRIP_STATE_WAITING_FOR_VIEWER;
                 outroSound.stop();
+                for (int i = 0; i < 3; i++) {
+                    sounds[i].stop();
+                }
             }
             break;
     }
@@ -307,8 +324,9 @@ void testApp::draw(){
     switch (tripState) {
         case TRIP_STATE_WAITING_FOR_VIEWER:
             ofSetColor(255, 255, 255);
-            camera.draw(ofGetWidth()/2 - 160,20);
-
+            if (debug) {
+                camera.draw(ofGetWidth()/2 - 160,20);
+            }
             text.drawString("please put your", ofGetWidth()/2 - (text.stringWidth("please put your")/2), ofGetHeight()/2);
             text.drawString("hands on the globes", ofGetWidth()/2 - (text.stringWidth("hands on the globes")/2), ofGetHeight()/2 + 40);
 
@@ -480,11 +498,19 @@ void testApp::switchVoice() {
 
 string testApp::takePhoto() {
     string tmpName = "viewer" + ofToString(int(ofRandom(99999999))) + ".png";
+    
     ofSaveImage(camera.getPixelsRef(), tmpName);
-    return tmpName;
+    ofImage tmpImage;
+    tmpImage.loadImage(tmpName);
+    tmpImage.rotate90(3);
+    tmpImage.saveImage("90"+tmpName);
+    return "90" + tmpName;
 }
 //--------------------------------------------------------------
 void testApp::keyPressed  (int key){
+    if (key == 'd') {
+        debug = !debug;
+    }
     switch (tripState) {
         case TRIP_STATE_WAITING_FOR_VIEWER:
             if (key == ' ') {
@@ -515,8 +541,6 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-    takePhoto();
-    
 }
 
 
