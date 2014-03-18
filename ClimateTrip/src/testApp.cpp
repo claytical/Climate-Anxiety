@@ -50,24 +50,22 @@ void testApp::introduction() {
 void testApp::outro() {
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     //TODO: Lookup Most Used Bucket
+    int randomTweet = int(ofRandom(0,6));
     string filename = takePhoto();
+
+    twitterClient.postStatus(tweets[favoriteTopic()][randomTweet], filename);
     switch (favoriteTopic()) {
         case WATER:
-            twitterClient.postStatus("this human enjoys the ocean #StoryMatter", filename);
-        
             synth.speak("Human, I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
             
             break;
         case AIR:
-            twitterClient.postStatus("this human can't get enough of the atmosphere #StoryMatter", filename);
 
-            synth.speak("Human, I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc10000]].");
+            synth.speak("Human, I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
 
             break;
         case EARTH:
-            twitterClient.postStatus("an earth loving human #StoryMatter", filename);
-            
-            synth.speak("Human, I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc10000]]");
+            synth.speak("Human, I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]]");
             
             
             break;
@@ -93,7 +91,33 @@ void testApp::startTrip() {
     thoughts[AIR].erase(thoughts[AIR].begin());
     tripState = TRIP_STATE_PLAYING;
 }
+void testApp::loadTweets() {
+    
+    tweets[WATER][0] = "this human loves the ocean #StoryMatter";
+    tweets[EARTH][0] = "this human can't get enough of earth #StoryMatter";
+    tweets[AIR][0] = "this human loves the atmosphere #StoryMatter";
 
+    tweets[WATER][1] = "this human enjoys the ocean #StoryMatter";
+    tweets[EARTH][1] = "an earth loving human #StoryMatter";
+    tweets[AIR][1] = "this human can't get enough of the atmosphere #StoryMatter";
+    
+    tweets[WATER][2] = "who loves the ocean? this human. #StoryMatter";
+    tweets[EARTH][2] = "i hear this human hearts earth #StoryMatter";
+    tweets[AIR][2] = "so much love for the atmosphere #StoryMatter";
+    
+    tweets[WATER][3] = "ocean loving human example #" + ofToString(int(ofRandom(99999))) + " #StoryMatter";
+    tweets[EARTH][3] = "the earth loves this human #StoryMatter";
+    tweets[AIR][3] = "this love is out of the atmosphere #StoryMatter";
+    
+    tweets[WATER][4] = "the ocean is feeling good #StoryMatter";
+    tweets[EARTH][4] = "this earth can contain all of your love #StoryMatter";
+    tweets[AIR][4] = "no need to fear, this human is all about the atmosphere #StoryMatter";
+    
+    tweets[WATER][5] = "oceans, lakes, rivers, creeks, this human loves them all #StoryMatter";
+    tweets[EARTH][5] = "gaia love! #StoryMatter";
+    tweets[AIR][5] = "pure air! pure love! #StoryMatter";
+
+}
 void testApp::loadDialogue() {
     Thought thought;
     //WATER SOUND

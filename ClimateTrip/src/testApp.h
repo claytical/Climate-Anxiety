@@ -37,6 +37,7 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
         void loadDialogue();
+        void loadTweets();
 		void gotMessage(ofMessage msg);		
         void nextSeriesBasedOnThoughts();
         void switchVoice();
@@ -67,6 +68,7 @@ class testApp : public ofBaseApp{
         float introSoundFadeOut;
         ofSoundPlayer outroSound;
         string viewerImage;
+        string tweets[3][6];
     
     
     
