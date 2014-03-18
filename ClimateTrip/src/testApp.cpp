@@ -6,7 +6,7 @@ void testApp::setup(){
 //    cout << "HEIGHT: " << ofGetHeight();
     text.loadFont("joystix.ttf", 32);
 
-	ofBackground(0,0,0);
+    ofBackground(0);
 	ofSetVerticalSync(true);
     //debugging
     vector<string> voices = ofxVoiceSynthesizer::getVoices();
@@ -31,9 +31,6 @@ void testApp::setup(){
     camera.setDeviceID(1);
 	camera.setDesiredFrameRate(60);
 	camera.initGrabber(320, 240);
-
-
-
 }
 
 void testApp::introduction() {
@@ -45,6 +42,13 @@ void testApp::introduction() {
     synth.speak("[[slnc 5000]]Hello human,[[slnc 1000]] I am very happy to have you here![[slnc 5000]] I want to introduce you to three of my friends. [[slnc 2000]] But before that I want you to take a deep breath.[[slnc 1000]] Relax! [[slnc 2000]] Listen to your heartbeat.[[slnc 15000]].");
     introSound.play();
     tripState = TRIP_STATE_INTRODUCTION;
+}
+void testApp::flash() {
+    ofSetColor(255,255,255, ofMap(ofGetElapsedTimef(), flashTime - .5, flashTime, 255, 0));
+    ofRect(0, 0, ofGetWidth(), ofGetHeight());
+    if (ofGetElapsedTimef() > flashTime) {
+        outro();
+    }
 }
 
 void testApp::outro() {
@@ -74,6 +78,7 @@ void testApp::outro() {
     }
     outroSound.play();
     tripState = TRIP_STATE_OUTRO;
+    
 }
 void testApp::startTrip() {
     brainWaveStrength[WATER] = 0;
@@ -336,7 +341,8 @@ void testApp::draw(){
                     else {
                         //generate new series
                         if (lastLine) {
-                            outro();
+                            flashTime = ofGetElapsedTimef() + .5;
+                            tripState = TRIP_STATE_FLASH;
                         }
                         else {
                             nextSeriesBasedOnThoughts();
@@ -349,6 +355,9 @@ void testApp::draw(){
 
             
             
+            break;
+        case TRIP_STATE_FLASH:
+            flash();
             break;
         case TRIP_STATE_OUTRO:
             ofSetColor(255, 255, 255);

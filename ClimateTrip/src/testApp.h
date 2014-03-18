@@ -17,6 +17,7 @@
 #define TRIP_STATE_INTRODUCTION         1
 #define TRIP_STATE_PLAYING              2
 #define TRIP_STATE_OUTRO                3
+#define TRIP_STATE_FLASH                4
 
 #define PORT 9001
 
@@ -45,12 +46,14 @@ class testApp : public ofBaseApp{
         void introduction();
         void outro();
         string takePhoto();
+        void flash();
         int randomUninterestingTopic(int interestedTopic);
         int randomThoughtIndex(int topic);
         int favoriteTopic();
     
         ofTrueTypeFont text;
         int tripState;
+        float flashTime;
     
         //thought based architecture
         vector<Thought> thoughts[3];
