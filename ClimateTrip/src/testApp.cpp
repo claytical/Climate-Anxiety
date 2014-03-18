@@ -335,7 +335,6 @@ void testApp::draw(){
                     for (int i = 0; i < 3; i++) {
                         sounds[i].stop();
                     }
-                    cout << "Playing topic " << series.getCurrentTopic();
                     sounds[series.getCurrentTopic()].play();
                     switchVoice();
                     synth.speak(series.getCurrentThought());
@@ -349,7 +348,6 @@ void testApp::draw(){
                         for (int i = 0; i < 3; i++) {
                             sounds[i].stop();
                         }
-                        cout << "Playing topic " << series.getCurrentTopic();
                         sounds[series.getCurrentTopic()].play();
                         synth.speak(series.getCurrentThought());
                     }
@@ -429,13 +427,9 @@ void testApp::nextSeriesBasedOnThoughts() {
         }
     }
     series.reset();
-    cout << "Adding two of topic " << highestInterestTopic << endl;
     brainWaveStrength[highestInterestTopic]++;
-    cout << "That topic has " << thoughts[highestInterestTopic].size() << " thoughts left" << endl;
     if (thoughts[highestInterestTopic].size() <= 0) {
         lastLine = true;
-        cout << "This is the last line of the experience, exact count" << endl;
-       // movieOver = true;
         return;
     }
     //add two of the selected topic
@@ -453,12 +447,10 @@ void testApp::nextSeriesBasedOnThoughts() {
         thoughtCopy = thoughts[highestInterestTopic][index];
         series.add(thoughtCopy);
         thoughts[highestInterestTopic].erase(thoughts[highestInterestTopic].begin() + index);
-        cout << "Deleted two for that interesting topic, now it has " << thoughts[highestInterestTopic].size() << " thoughts left" << endl;
     }
     
     if (thoughts[highestInterestTopic].size() <= 0) {
         lastLine = true;
-        cout << "This is the last line of the experience" << endl;
     }
     
     //choose the second or a random?
@@ -467,10 +459,8 @@ void testApp::nextSeriesBasedOnThoughts() {
     index = randomThoughtIndex(randomTopic);
     thoughtCopy =thoughts[randomTopic][index];
     series.add(thoughts[randomTopic][index]);
-    cout << "Picking Random Topic " << randomTopic << endl;
     //erase that one as well
     thoughts[randomTopic].erase(thoughts[randomTopic].begin() + index);
-    cout << "And I delete it, now that topic has " << thoughts[randomTopic].size() << endl;
  }
 
 void testApp::switchVoice() {
