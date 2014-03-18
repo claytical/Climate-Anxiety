@@ -153,7 +153,7 @@ void testApp::loadDialogue() {
     //WATER THOUGHTS
     thought.create(images[WATER][0], sounds[WATER],  "I am holding so much heat beneath my vast surface, [[slnc 500]] you can barely see it, but I can really feel it. [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 1);
     thoughts[WATER].push_back(thought);
-    thought.create(images[WATER][1], sounds[WATER],  " I am unleashing my heated frustration  [[slnc 400]] as tumultuous surf and currents. [[slnc 500]] I am torrid. [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 2);
+    thought.create(images[WATER][1], sounds[WATER],  "I am unleashing my heated frustration  [[slnc 400]] as tumultuous surf and currents. [[slnc 500]] I am torrid. [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 2);
     thoughts[WATER].push_back(thought);
     thought.create(images[WATER][2], sounds[WATER],  "Carbon dioxide is forced into me. [[slnc 500]] I'm acidified, and the life within me is dying. [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 3);
     
@@ -191,7 +191,7 @@ void testApp::loadDialogue() {
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][3], sounds[AIR], "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth more than ever before.[[slnc 500]] I don't know what will happen. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 4);
+    thought.create(images[AIR][3], sounds[AIR], "Even if we reduce emissions today  [[slnc 300] I will contain more carbon dioxide and heat than I ever have before. [[slnc 500]] I don’t know what will happen, but it will last thousands of years. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 4);
     thoughts[AIR].push_back(thought);
     
     
@@ -217,7 +217,7 @@ void testApp::loadDialogue() {
     thoughts[EARTH].push_back(thought);
     thought.create(images[EARTH][1], sounds[EARTH], "My altered climate spreads tropical diseases such as malaria to more regions. [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 2);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][2], sounds[EARTH], "The extreme weather is changing my soil so unpredictably that agriculture will lose productivity. [[slnc 1000]] I am confused. I am the Earth. [[slnc 3000]]", EARTH, 3);
+    thought.create(images[EARTH][2], sounds[EARTH], "The unpredictable weather changes my soil, [[slnc 400]] and as a result agriculture is not as productive. [[slnc 1000]] I am confused. I am the Earth. [[slnc 3000]].", EARTH, 3);
     thoughts[EARTH].push_back(thought);
     thought.create(images[EARTH][3], sounds[EARTH], "My temperatures started to rise along with the industrial revolution. [[slnc 500]] Since the 1960's my temperature has risen faster. [[slnc 500]] I am not chill.  [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 4);
     thoughts[EARTH].push_back(thought);
