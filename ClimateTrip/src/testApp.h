@@ -6,6 +6,8 @@
 #include "series.h"
 #include "character.h"
 #include "thought.h"
+#include "ofxOsc.h"
+
 #define WATER       0
 #define EARTH       1
 #define AIR         2
@@ -15,6 +17,7 @@
 #define TRIP_STATE_PLAYING              2
 #define TRIP_STATE_OUTRO                3
 
+#define PORT 9001
 
 class testApp : public ofBaseApp{
 
@@ -41,6 +44,7 @@ class testApp : public ofBaseApp{
         void outro();
         int randomUninterestingTopic(int interestedTopic);
         int randomThoughtIndex(int topic);
+        int favoriteTopic();
     
         ofTrueTypeFont text;
         int tripState;
@@ -50,19 +54,18 @@ class testApp : public ofBaseApp{
         Series series;
         ofImage images[3][6];
         ofSoundPlayer sounds[3];
+        int brainWaveStrength[3];
+        ofSoundPlayer introSound;
+        ofSoundPlayer outroSound;
     
     
     
     //true for all
         ofxVoiceSynthesizer synth;
-       // ofxVoiceSynthesizer synths[3];
-        bool movieOver;
-        bool outroducingTrip;
-        bool introducingTrip;
-        bool begin;
+        ofxOscReceiver receiver;
+
         bool firstLine;
         bool lastLine;
-        int currentSceneIndex;
-        int currentSynthIndex;
+        bool usingRandomValues;
 };
 

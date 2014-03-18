@@ -11,6 +11,7 @@ void Thought::create(ofImage img, ofSoundPlayer s, string l, int t, int it) {
     image = img;
     sound = s;
     s.setLoop(true);
+    s.setVolume(0);
     line = l;
     topic = t;
     iter = it;

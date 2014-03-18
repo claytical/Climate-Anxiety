@@ -2,41 +2,44 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-    cout << "WIDTH: " << ofGetWidth();
-    cout << "HEIGHT: " << ofGetHeight();
+//    cout << "WIDTH: " << ofGetWidth();
+//    cout << "HEIGHT: " << ofGetHeight();
     text.loadFont("joystix.ttf", 32);
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
     //debugging
     vector<string> voices = ofxVoiceSynthesizer::getVoices();
     synth.setup("com.apple.speech.synthesis.voice.Vicki");
-
+    usingRandomValues = true;
+    introSound.loadSound("1.wav");
+    outroSound.loadSound("2.wav");
     for(int i = 0; i < voices.size(); i++) {
         ofLogNotice() << voices[i];
     }
-
-    movieOver = true;
-    introducingTrip = false;
-    outroducingTrip = false;
+    
+	receiver.setup(PORT);
 
 }
 
 void testApp::introduction() {
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
-    synth.speak("Welcome to Climate Anxiety Trip");
-//    introducingTrip = true;
+    synth.speak("Hello human, I am very happy to have you here! I want to introduce you to three of my friends, but before that I want you to take a deep breath.[[slnc 1000]] Relax! [[slnc 1000]] Listen to your heartbeat.");
+    introSound.play();
     tripState = TRIP_STATE_INTRODUCTION;
 }
 
 void testApp::outro() {
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
-    synth.speak("Goodbye");
+    //TODO: Lookup Most Used Bucket
+    synth.speak("Human, I am the Atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+    outroSound.play();
     tripState = TRIP_STATE_OUTRO;
 }
 void testApp::startTrip() {
-
+    brainWaveStrength[WATER] = 0;
+    brainWaveStrength[AIR] = 0;
+    brainWaveStrength[EARTH] = 0;
     firstLine = true;
-    currentSceneIndex = 0;
     loadDialogue();
     series.reset();
     
@@ -159,8 +162,21 @@ void testApp::update(){
             break;
         case TRIP_STATE_PLAYING:
             if (synth.isSpeaking()) {
-                //add to aggregate interest level
-                series.gaugeInterest(ofRandom(2));
+                if (usingRandomValues) {
+                    series.gaugeInterest(ofRandom(2));
+                }
+                else {
+                    while(receiver.hasWaitingMessages()){
+                        // get the next message
+                        ofxOscMessage m;
+                        receiver.getNextMessage(&m);
+                        if (m.getAddress() == "/eeg") {
+                            int brainWave = m.getArgAsInt32(0);
+                            series.gaugeInterest(brainWave);
+                        }
+                    }
+                }
+                    //add to aggregate interest level
             }
             break;
         case TRIP_STATE_OUTRO:
@@ -179,16 +195,16 @@ void testApp::draw(){
     switch (tripState) {
         case TRIP_STATE_WAITING_FOR_VIEWER:
             ofSetColor(255, 255, 255);
-            text.drawString("Place Your Hands on the Globes to Start", 20, ofGetHeight()/2);
+            text.drawString("PLEASE PUT YOUR HANDS ON THE GLOBES", 20, ofGetHeight()/2);
 
             break;
         case TRIP_STATE_INTRODUCTION:
             ofSetColor(255, 255, 255);
-            text.drawString("This is an introduction", 20, ofGetHeight()/2);
+            text.drawString("introduction...", 20, ofGetHeight()/2);
             break;
         case TRIP_STATE_PLAYING:
             series.display();
-            currentSynthIndex = series.getCurrentTopic();
+           // currentSynthIndex = series.getCurrentTopic();
             if (firstLine) {
                 if (!synth.isSpeaking()) {
                     switchVoice();
@@ -222,7 +238,7 @@ void testApp::draw(){
             break;
         case TRIP_STATE_OUTRO:
             ofSetColor(255, 255, 255);
-            text.drawString("This is the outro", 20, ofGetHeight()/2);
+            text.drawString("You Favored ...", 20, ofGetHeight()/2);
 
             break;
     }
@@ -231,7 +247,18 @@ void testApp::draw(){
 }
 
 
+int testApp::favoriteTopic() {
+    float highestInterestLevel = -999999;
+    int highestInterestTopic = -1;
+    for (int i = 0; i < 3; i++) {
+        if (brainWaveStrength[i] > highestInterestLevel) {
+            highestInterestTopic = i;
+            highestInterestLevel = brainWaveStrength[i];
+        }
+    }
+    return highestInterestTopic;
 
+}
 int testApp::randomThoughtIndex(int type) {
     int selectedIndex;
     selectedIndex = ofRandom(thoughts[type].size());
@@ -259,16 +286,18 @@ void testApp::nextSeriesBasedOnThoughts() {
     for (int i = 0; i < series.thoughts.size(); i++) {
         if (series.thoughts[i].interest > highestInterestLevel) {
             highestInterestTopic = series.thoughts[i].topic;
+            highestInterestLevel = series.thoughts[i].interest;
             highestInterestIndex = i;
         }
     }
     series.reset();
     cout << "Adding two of topic " << highestInterestTopic << endl;
+    brainWaveStrength[highestInterestTopic]++;
     cout << "That topic has " << thoughts[highestInterestTopic].size() << " thoughts left" << endl;
     if (thoughts[highestInterestTopic].size() <= 0) {
         lastLine = true;
         cout << "This is the last line of the experience, exact count" << endl;
-        movieOver = true;
+       // movieOver = true;
         return;
     }
     //add two of the selected topic
@@ -324,7 +353,7 @@ void testApp::switchVoice() {
 void testApp::keyPressed  (int key){
     switch (tripState) {
         case TRIP_STATE_WAITING_FOR_VIEWER:
-            if (key == ' ' && movieOver) {
+            if (key == ' ') {
                 introduction();
             }
             break;
@@ -335,15 +364,6 @@ void testApp::keyPressed  (int key){
         case TRIP_STATE_OUTRO:
             break;
     }
-//    scenes[currentSceneIndex].start();
-//    begin = false;
-/*
-    if (key == ' ' && movieOver) {
-        introduction();
-//        movieOver = false;
-//        startTrip();
-    }
-*/
  }
 
 //--------------------------------------------------------------
