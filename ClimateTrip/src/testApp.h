@@ -81,6 +81,7 @@ class testApp : public ofBaseApp{
         ofxTwitter twitterClient;
         bool firstLine;
         bool lastLine;
+        bool tookPhotoWithFlash;
         bool usingRandomValues;
     
     

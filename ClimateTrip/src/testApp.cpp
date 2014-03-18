@@ -38,10 +38,12 @@ void testApp::introduction() {
     heartbeatDirection = 1;
     heartbeatAlpha = 10;
     heartbeatTempo = 2;
+    tookPhotoWithFlash = false;
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     synth.speak("[[slnc 5000]]Hello human,[[slnc 1000]] I am very happy to have you here![[slnc 5000]] I want to introduce you to three of my friends. [[slnc 2000]] But before that I want you to take a deep breath.[[slnc 1000]] Relax! [[slnc 2000]] Listen to your heartbeat.[[slnc 15000]].");
     introSound.play();
     tripState = TRIP_STATE_INTRODUCTION;
+
 }
 void testApp::flash() {
     ofSetColor(255,255,255, ofMap(ofGetElapsedTimef(), flashTime - .5, flashTime, 255, 0));
@@ -49,15 +51,21 @@ void testApp::flash() {
     if (ofGetElapsedTimef() > flashTime) {
         outro();
     }
+    if (!tookPhotoWithFlash) {
+        viewerImage = takePhoto();
+        tookPhotoWithFlash = true;
+    }
+
 }
 
 void testApp::outro() {
-    synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     //TODO: Lookup Most Used Bucket
-    int randomTweet = int(ofRandom(0,6));
-    string filename = takePhoto();
+    synth.setVoice("com.apple.speech.synthesis.voice.Fred");
 
-    twitterClient.postStatus(tweets[favoriteTopic()][randomTweet], filename);
+    int randomTweet = int(ofRandom(0,6));
+    twitterClient.postStatus(tweets[favoriteTopic()][randomTweet], viewerImage);
+    synth.setVoice("com.apple.speech.synthesis.voice.Fred");
+
     switch (favoriteTopic()) {
         case WATER:
             synth.speak("Human, I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
