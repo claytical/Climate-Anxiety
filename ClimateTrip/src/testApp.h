@@ -7,6 +7,7 @@
 #include "character.h"
 #include "thought.h"
 #include "ofxOsc.h"
+#include "ofxTwitter.h"
 
 #define WATER       0
 #define EARTH       1
@@ -42,6 +43,7 @@ class testApp : public ofBaseApp{
         void startTrip();
         void introduction();
         void outro();
+        string takePhoto();
         int randomUninterestingTopic(int interestedTopic);
         int randomThoughtIndex(int topic);
         int favoriteTopic();
@@ -64,15 +66,25 @@ class testApp : public ofBaseApp{
         float heartbeatTempo;
         float introSoundFadeOut;
         ofSoundPlayer outroSound;
+        string viewerImage;
     
     
     
     //true for all
         ofxVoiceSynthesizer synth;
         ofxOscReceiver receiver;
-
+        ofxTwitter twitterClient;
         bool firstLine;
         bool lastLine;
         bool usingRandomValues;
+    
+    
+    //webcam
+    
+    ofVideoGrabber 		camera;
+    unsigned char * 	videoInverted;
+    ofTexture			videoTexture;
+    ofImage             viewer;
+
 };
 

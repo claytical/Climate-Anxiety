@@ -11,19 +11,27 @@ void testApp::setup(){
     //debugging
     vector<string> voices = ofxVoiceSynthesizer::getVoices();
     synth.setup("com.apple.speech.synthesis.voice.Vicki");
-    usingRandomValues = true;
+    usingRandomValues = false;
     introSound.loadSound("intro.wav");
     outroSound.loadSound("intro.wav");
     heartImage.loadImage("heart.png");
     outroImage[WATER].loadImage("ocean.jpg");
     outroImage[EARTH].loadImage("earth.jpg");
     outroImage[AIR].loadImage("air.jpg");
+    string const CONSUMER_KEY = "tJuuYtvkX9D4yO4y3jtcg";
+    string const CONSUMER_SECRET = "25qympGYaARpTyOVsTAUNtMkXwgjiAmvUelpgAOx8I";
     
+    twitterClient.authorize(CONSUMER_KEY, CONSUMER_SECRET);
+    twitterClient.printDebugInfo();
     for(int i = 0; i < voices.size(); i++) {
         ofLogNotice() << voices[i];
     }
     
 	receiver.setup(PORT);
+    camera.setDeviceID(1);
+	camera.setDesiredFrameRate(60);
+	camera.initGrabber(320, 240);
+
 
 
 }
@@ -42,18 +50,24 @@ void testApp::introduction() {
 void testApp::outro() {
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     //TODO: Lookup Most Used Bucket
+    string filename = takePhoto();
     switch (favoriteTopic()) {
         case WATER:
+            twitterClient.postStatus("this human enjoys the ocean #StoryMatter", filename);
         
-            synth.speak("Human, I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+            synth.speak("Human, I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
             
             break;
         case AIR:
-            synth.speak("Human, I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+            twitterClient.postStatus("this human can't get enough of the atmosphere #StoryMatter", filename);
+
+            synth.speak("Human, I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc10000]].");
 
             break;
         case EARTH:
-            synth.speak("Human, I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+            twitterClient.postStatus("an earth loving human #StoryMatter", filename);
+            
+            synth.speak("Human, I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc10000]]");
             
             
             break;
@@ -178,10 +192,39 @@ void testApp::loadDialogue() {
 }
 //--------------------------------------------------------------
 void testApp::update(){
-    
-    
+    int brainWave = 0;
+    bool pulse = false;
+    while(receiver.hasWaitingMessages()){
+        // get the next message
+        ofxOscMessage m;
+        receiver.getNextMessage(&m);
+        cout << "got message" << endl;
+        
+        if (m.getAddress() == "/attention") {
+            brainWave = m.getArgAsInt32(0);
+
+            cout << "got attention " << brainWave << endl;
+        }
+        if (m.getAddress() == "/pulse") {
+            //got pulse, let's go!
+            pulse = true;
+            
+        }
+        
+        
+    }
+
     switch (tripState) {
         case TRIP_STATE_WAITING_FOR_VIEWER:
+            if (pulse) {
+                introduction();
+            }
+            
+            camera.update();
+            
+            if (camera.isFrameNew()){
+            }
+
             break;
         case TRIP_STATE_INTRODUCTION:
             if (!synth.isSpeaking()) {
@@ -189,6 +232,7 @@ void testApp::update(){
             }
             break;
         case TRIP_STATE_PLAYING:
+
             introSoundFadeOut *= .99;
             introSound.setVolume(introSoundFadeOut);
             if (introSoundFadeOut <= .01) {
@@ -199,20 +243,18 @@ void testApp::update(){
                     series.gaugeInterest(ofRandom(2));
                 }
                 else {
-                    while(receiver.hasWaitingMessages()){
-                        // get the next message
-                        ofxOscMessage m;
-                        receiver.getNextMessage(&m);
-                        if (m.getAddress() == "/eeg") {
-                            int brainWave = m.getArgAsInt32(0);
-                            series.gaugeInterest(brainWave);
-                        }
-                    }
+                    series.gaugeInterest(brainWave);
+
                 }
-                    //add to aggregate interest level
             }
             break;
         case TRIP_STATE_OUTRO:
+            while(receiver.hasWaitingMessages()){
+                // get the next message, clear the queue
+                ofxOscMessage m;
+                receiver.getNextMessage(&m);
+            }
+
             if (!synth.isSpeaking()) {
                 tripState = TRIP_STATE_WAITING_FOR_VIEWER;
                 outroSound.stop();
@@ -228,7 +270,11 @@ void testApp::draw(){
     switch (tripState) {
         case TRIP_STATE_WAITING_FOR_VIEWER:
             ofSetColor(255, 255, 255);
-            text.drawString("PLEASE PUT YOUR HANDS ON THE GLOBES", 20, ofGetHeight()/2);
+            camera.draw(ofGetWidth()/2 - 160,20);
+
+            text.drawString("please put your", ofGetWidth()/2 - (text.stringWidth("please put your")/2), ofGetHeight()/2);
+            text.drawString("hands on the globes", ofGetWidth()/2 - (text.stringWidth("hands on the globes")/2), ofGetHeight()/2 + 40);
+
 
             break;
         case TRIP_STATE_INTRODUCTION:
@@ -239,7 +285,7 @@ void testApp::draw(){
             }
             if(heartbeatAlpha < 10) {
                 heartbeatDirection = 1;
-                heartbeatTempo *= .9;
+                heartbeatTempo *= .95;
             }
             
             ofSetColor(255, 255, 255, heartbeatAlpha);
@@ -393,6 +439,12 @@ void testApp::switchVoice() {
     }
 
 }
+
+string testApp::takePhoto() {
+    string tmpName = "viewer" + ofToString(int(ofRandom(99999999))) + ".png";
+    ofSaveImage(camera.getPixelsRef(), tmpName);
+    return tmpName;
+}
 //--------------------------------------------------------------
 void testApp::keyPressed  (int key){
     switch (tripState) {
@@ -425,8 +477,8 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-    synth.speak("My temperatures have rose since the industrial revolution from coal burning. [[slnc 1000]] Since the 1960s I've heated sharply sharply, [[slnc 500]]I don't think this was from burning pot. [[slnc 500]]I am not chill. I am the Earth. [[slnc 3000]].");
-
+    takePhoto();
+    
 }
 
 
