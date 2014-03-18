@@ -131,22 +131,22 @@ void testApp::loadDialogue() {
     images[WATER][5].loadImage("ocean5.jpg");
     
     //WATER THOUGHTS
-    thought.create(images[WATER][0], sounds[WATER],  "I am holding so much heat beneath my vast surface, you can barely see it. [[slnc 400]] I am the ocean.", WATER, 1);
+    thought.create(images[WATER][0], sounds[WATER],  "I am holding so much heat beneath my vast surface, [[slnc 500]] you can barely see it, but I can really feel it. [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 1);
     thoughts[WATER].push_back(thought);
-    thought.create(images[WATER][1], sounds[WATER],  "I am unleashing my heated frustration as tumultuous surf and currents. [[slnc 400]] I am the ocean.", WATER, 2);
+    thought.create(images[WATER][1], sounds[WATER],  " I am unleashing my heated frustration  [[slnc 400]] as tumultuous surf and currents. [[slnc 500]] I am torrid. [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 2);
     thoughts[WATER].push_back(thought);
-    thought.create(images[WATER][2], sounds[WATER],  "Carbon dioxide is forced into me, I'm acidified, the life within me is dying. [[slnc 400]] I am the ocean.", WATER, 3);
+    thought.create(images[WATER][2], sounds[WATER],  "Carbon dioxide is forced into me. [[slnc 500]] I'm acidified, and the life within me is dying. [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 3);
     
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][3], sounds[WATER],  "My integrity is upheld by valiant sheets of ice, yet they are slipping away, crashing down and melting into me. I am swelling, [[slnc 400]] I am the ocean.", WATER, 4);
+    thought.create(images[WATER][3], sounds[WATER],  "My honor is upheld by valiant sheets of ice, [[slnc 500]] yet they are slipping away and melting into me. [[slnc 500]] I am swelling, [[slnc 1000]] I am the ocean. [[slnc 3000]].", WATER, 4);
     
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][4], sounds[WATER],  "I have trapped polluting gases within my ice, yet the melting releases more my gaseous enemy uncontrollably. I am the ice, [[slnc 400]] I am the ocean.", WATER, 5);
+    thought.create(images[WATER][4], sounds[WATER],  "I have greenhouse gases trapped within my ice, and the melting releases my gaseous enemy. [[slnc 1000]] I am the ice, [[slnc 350]] I am the ocean. [[slnc 3000]].", WATER, 5);
     thoughts[WATER].push_back(thought);
     
-    thought.create(images[WATER][5], sounds[WATER],  "I have gone through changes like this before, but never this extreme. I am scared, [[slnc 400]] I am the ocean.", WATER, 6);
+    thought.create(images[WATER][5], sounds[WATER],  "I have have changed size before, [[slnc 500]] but never this extreme. [[slnc 400] I am scared [[slnc 1000]] I am the ocean. [[slnc 3000]]", WATER, 6);
     thoughts[WATER].push_back(thought);
     
     
@@ -163,7 +163,7 @@ void testApp::loadDialogue() {
     
     //AIR THOUGHTS
     
-    thought.create(images[AIR][0],  sounds[AIR], "It is hard to breathe. [[slnc 1000]] There are more greenhouse gases than I have ever experienced before, it is suffocating. [[slnc 1000]] I am the atmosphere. [[slnc 3000]]", AIR, 1);
+    thought.create(images[AIR][0],  sounds[AIR], "It is hard to breathe. [[slnc 700]] There are more greenhouse gases than I have ever experienced before, it is suffocating. [[slnc 1000]] I am the atmosphere. [[slnc 3000]]", AIR, 1);
     thoughts[AIR].push_back(thought);
     
     thought.create(images[AIR][1], sounds[AIR], "My environment has always been in flux [[slnc 500]] and my rhythm for 650,000 years was great. [[slnc 1000]] since 1950 I have not been able to adjust [[slnc 500]] I don't know what is going to happen. I am the atmosphere.", AIR, 2);
@@ -203,13 +203,13 @@ void testApp::loadDialogue() {
     thoughts[EARTH].push_back(thought);
     thought.create(images[EARTH][1], sounds[EARTH], "My altered climate spreads tropical diseases such as malaria to more regions. [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 2);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][2], sounds[EARTH], "The extreme weather is changing my soil unpredictably. Agriculture not be as productive. [[slnc 1000]] I am confused. I am the Earth. [[slnc 3000]].", EARTH, 3);
+    thought.create(images[EARTH][2], sounds[EARTH], "The extreme weather is changing my soil so unpredictably that agriculture will lose productivity. [[slnc 1000]] I am confused. I am the Earth. [[slnc 3000]]", EARTH, 3);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][3], sounds[EARTH], "My temperatures started to rise since the industrial revolution from coal burning. [[slnc 1000]] Since the 1960’s I’ve heated sharply sharply, [[slnc 500]]I don’t think this was from burning pot. [[slnc 500]]I am not chill. I am the Earth. [[slnc 3000]].", EARTH, 4);
+    thought.create(images[EARTH][3], sounds[EARTH], "My temperatures started to rise along with the industrial revolution. [[slnc 500]] Since the 1960’s my temperature has risen faster. [[slnc 500]] I am not chill.  [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 4);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][4], sounds[EARTH], "The ice is melting, leaving more of my minerals accessible. [[slnc 500]]People are digging into me to get them and I feel exposed. [[slnc 1000]]I am the Earth. [[slnc 3000]]", EARTH, 5);
+    thought.create(images[EARTH][4], sounds[EARTH], "The ice is melting, leaving more of my minerals accessible. [[slnc 500]] People are digging into me to get them  [[slnc 500]] exposing me. [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 5);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][5], sounds[EARTH], "Through climate change I had to let go of more than 20% of animal species, which will never be able to return. I am living. [[slnc 400]] I am the Earth!", EARTH, 6);
+    thought.create(images[EARTH][5], sounds[EARTH], "I may lose more than 15 to 37% of all my plant and animal species, [[slnc 1000]] they will never be able to return. [[slnc 500]] I am living too. [[slnc 500]] I am the Earth. [[slnc 3000]]", EARTH, 6);
     thoughts[EARTH].push_back(thought);
   
     
