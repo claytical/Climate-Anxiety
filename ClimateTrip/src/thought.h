@@ -30,6 +30,8 @@ public:
     float scale;
     float moveX;
     float moveY;
+    float alpha;
+    int alphaDirection;
     ofPoint position;
     ofImage image;
     ofSoundPlayer sound;

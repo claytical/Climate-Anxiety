@@ -53,9 +53,16 @@ class testApp : public ofBaseApp{
         vector<Thought> thoughts[3];
         Series series;
         ofImage images[3][6];
+        ofImage outroImage[3];
         ofSoundPlayer sounds[3];
         int brainWaveStrength[3];
         ofSoundPlayer introSound;
+        ofImage heartImage;
+        int heartbeatDirection;
+        int selectedTopic;
+        float heartbeatAlpha;
+        float heartbeatTempo;
+        float introSoundFadeOut;
         ofSoundPlayer outroSound;
     
     

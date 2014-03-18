@@ -5,25 +5,36 @@ void testApp::setup(){
 //    cout << "WIDTH: " << ofGetWidth();
 //    cout << "HEIGHT: " << ofGetHeight();
     text.loadFont("joystix.ttf", 32);
+
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
     //debugging
     vector<string> voices = ofxVoiceSynthesizer::getVoices();
     synth.setup("com.apple.speech.synthesis.voice.Vicki");
     usingRandomValues = true;
-    introSound.loadSound("1.wav");
-    outroSound.loadSound("2.wav");
+    introSound.loadSound("intro.wav");
+    outroSound.loadSound("intro.wav");
+    heartImage.loadImage("heart.png");
+    outroImage[WATER].loadImage("ocean.jpg");
+    outroImage[EARTH].loadImage("earth.jpg");
+    outroImage[AIR].loadImage("air.jpg");
+    
     for(int i = 0; i < voices.size(); i++) {
         ofLogNotice() << voices[i];
     }
     
 	receiver.setup(PORT);
 
+
 }
 
 void testApp::introduction() {
+    introSoundFadeOut = 1;
+    heartbeatDirection = 1;
+    heartbeatAlpha = 10;
+    heartbeatTempo = 2;
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
-    synth.speak("Hello human, I am very happy to have you here! I want to introduce you to three of my friends, but before that I want you to take a deep breath.[[slnc 1000]] Relax! [[slnc 1000]] Listen to your heartbeat.");
+    synth.speak("[[slnc 5000]]Hello human,[[slnc 1000]] I am very happy to have you here![[slnc 5000]] I want to introduce you to three of my friends. [[slnc 2000]] But before that I want you to take a deep breath.[[slnc 1000]] Relax! [[slnc 2000]] Listen to your heartbeat.[[slnc 15000]].");
     introSound.play();
     tripState = TRIP_STATE_INTRODUCTION;
 }
@@ -31,7 +42,24 @@ void testApp::introduction() {
 void testApp::outro() {
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     //TODO: Lookup Most Used Bucket
-    synth.speak("Human, I am the Atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+    switch (favoriteTopic()) {
+        case WATER:
+        
+            synth.speak("Human, I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+            
+            break;
+        case AIR:
+            synth.speak("Human, I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+
+            break;
+        case EARTH:
+            synth.speak("Human, I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug?");
+            
+            
+            break;
+        default:
+            break;
+    }
     outroSound.play();
     tripState = TRIP_STATE_OUTRO;
 }
@@ -55,14 +83,14 @@ void testApp::startTrip() {
 void testApp::loadDialogue() {
     Thought thought;
     //WATER SOUND
-    sounds[WATER].loadSound("1.wav");
+    sounds[WATER].loadSound("water_001.wav");
     //WATER IMAGES
-    images[WATER][0].loadImage("water0.jpg");
-    images[WATER][1].loadImage("water1.jpg");
-    images[WATER][2].loadImage("water2.jpg");
-    images[WATER][3].loadImage("water3.jpg");
-    images[WATER][4].loadImage("water4.jpg");
-    images[WATER][5].loadImage("water5.jpg");
+    images[WATER][0].loadImage("ocean0.jpg");
+    images[WATER][1].loadImage("ocean1.jpg");
+    images[WATER][2].loadImage("ocean2.jpg");
+    images[WATER][3].loadImage("ocean3.jpg");
+    images[WATER][4].loadImage("ocean4.jpg");
+    images[WATER][5].loadImage("ocean5.jpg");
     
     //WATER THOUGHTS
     thought.create(images[WATER][0], sounds[WATER],  "I am holding so much heat beneath my vast surface, you can barely see it. [[slnc 400]] I am the ocean.", WATER, 1);
@@ -85,7 +113,7 @@ void testApp::loadDialogue() {
     
     
     //AIR SOUND
-    sounds[AIR].loadSound("2.wav");
+    sounds[AIR].loadSound("atmosphere_001.mp3");
 
     //AIR IMAGES
     images[AIR][0].loadImage("air0.jpg");
@@ -97,29 +125,29 @@ void testApp::loadDialogue() {
     
     //AIR THOUGHTS
     
-    thought.create(images[AIR][0],  sounds[AIR], "I am trying to breathe, but my airways feel obstructed, there is more greenhouse gases than I have ever experienced before. It is suffocating, [[slnc 400]] I am the atmosphere.", AIR, 1);
+    thought.create(images[AIR][0],  sounds[AIR], "It is hard to breathe. [[slnc 1000]] There are more greenhouse gases than I have ever experienced before, it is suffocating. [[slnc 1000]] I am the atmosphere. [[slnc 3000]]", AIR, 1);
     thoughts[AIR].push_back(thought);
     
-    thought.create(images[AIR][1], sounds[AIR], "My environment has always been constantly changing, and I was in rhythm with it for the past 650,000 years, but since 1950 things I have not been able to adjust. I donÕt know what is going to happen, this is new for me, [[slnc 400]] I am the atmosphere.", AIR, 2);
+    thought.create(images[AIR][1], sounds[AIR], "My environment has always been in flux [[slnc 500]] and my rhythm for 650,000 years was great. [[slnc 1000]] since 1950 I have not been able to adjust [[slnc 500]] I don't know what is going to happen. I am the atmosphere.", AIR, 2);
     thoughts[AIR].push_back(thought);
     
-    thought.create(images[AIR][2], sounds[AIR], "The burning of fossil fuels changes my identity and heat gets trapped beneath my surface. You have already burned half of all fossil fuels available to you. If you burn the rest you will put more than 1000 tonnes of carbon into me. [[slnc 400]] I am the atmosphere.", AIR, 3);
-    thoughts[AIR].push_back(thought);
-    
-    
-    thought.create(images[AIR][3], sounds[AIR], "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth and take us into uncharted territory. Nobody, including me, knows what will happen then. [[slnc 400]]I am the Atmosphere!", AIR, 4);
+    thought.create(images[AIR][2], sounds[AIR], "The burning of fossil fuels changes my identity [[slnc 500]] and traps heat within my sphere. [[slnc 500]]I don't recognize myself. [[slnc 1000]] I am the atmosphere. [[slnc 3000]].", AIR, 3);
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][4], sounds[AIR], "I will continue to make hot days hotter and cold days colder, I will throw more storms at you and with more intensity than before. Yet the desert will not see these storms and it will become thirsty. [[slnc 400]]I am the Atmosphere!", AIR, 5);
+    thought.create(images[AIR][3], sounds[AIR], "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth more than ever before.[[slnc 500]] I donÕt know what will happen. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 4);
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][5], sounds[AIR], "If we stay on the path weÕre on, I will continue to heat up. I have become an experiment, I hold your only home. I am nervous.[[slnc 400]] I am the atmosphere. ", AIR, 6);
+    thought.create(images[AIR][4], sounds[AIR], "I will continue to make hot days hotter and cold days colder, [[slnc 500]] I will throw more storms at you and with more intensity than before. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 5);
+    thoughts[AIR].push_back(thought);
+    
+    
+    thought.create(images[AIR][5], sounds[AIR], "If we stay on the path weÕre on, I will continue to heat up faster. [[slnc 1000]] I have become your experiment, [[slnc 500]] yet I shelter your only home. I am [[slnc 500]] nervous. I am the atmosphere. [[slnc 3000]].", AIR, 6);
     thoughts[AIR].push_back(thought);
    
     //EARTH SOUND
-    sounds[EARTH].loadSound("3.wav");
+    sounds[EARTH].loadSound("earth_001.mp3");
 
 
     //EARTH IMAGES - not in directory yet
@@ -133,15 +161,15 @@ void testApp::loadDialogue() {
     
     //EARTH THOUGHTS
     
-    thought.create(images[EARTH][0], sounds[EARTH],"I have seen the greatest temperature increase, I try to reflect radiative heat but something is not letting it out and I am soaking more in than I can handle. I am uncomfortable. [[slnc 400]] I am the Earth.", EARTH, 1);
+    thought.create(images[EARTH][0], sounds[EARTH],"I have seen the greatest temperature increase, [[slnc 500]]I am unable to let all the heat out. [[slnc 500]] It is uncomfortable. [[slnc 1000]]I am the Earth. [[slnc 3000]].", EARTH, 1);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][1], sounds[EARTH], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases.[[slnc 400]] I am the Earth.", EARTH, 2);
+    thought.create(images[EARTH][1], sounds[EARTH], "My altered climate spreads tropical diseases such as malaria to more regions. [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 2);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][2], sounds[EARTH], "The extreme weather is changing my soil. It is will become more difficult to keep up with my changing weather and agriculture not be as productive. I am confused. [[slnc 400]]I am the Earth.", EARTH, 3);
+    thought.create(images[EARTH][2], sounds[EARTH], "The extreme weather is changing my soil unpredictably. Agriculture not be as productive. [[slnc 1000]] I am confused. I am the Earth. [[slnc 3000]].", EARTH, 3);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][3], sounds[EARTH], "I started heating up at the onset of the industrial revolution and increased burning of coal. During the 1960Õs my temperature rose faster and is continuing to rise, I donÕt think this was from the increased burning of marijuana. I am not chill. [[slnc 400]]I am the Earth.", EARTH, 4);
+    thought.create(images[EARTH][3], sounds[EARTH], "My temperatures started to rise since the industrial revolution from coal burning. [[slnc 1000]] Since the 1960Õs IÕve heated sharply sharply, [[slnc 500]]I donÕt think this was from burning pot. [[slnc 500]]I am not chill. I am the Earth. [[slnc 3000]].", EARTH, 4);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][4], sounds[EARTH], "My altered climate spreads tropical regions along with  diseases such as malaria. The changes also spike pollution episodes and increase the number of airborne particulates to worsen respiratory diseases. [[slnc 400]]I am the Earth.", EARTH, 5);
+    thought.create(images[EARTH][4], sounds[EARTH], "The ice is melting, leaving more of my minerals accessible. [[slnc 500]]People are digging into me to get them and I feel exposed. [[slnc 1000]]I am the Earth. [[slnc 3000]]", EARTH, 5);
     thoughts[EARTH].push_back(thought);
     thought.create(images[EARTH][5], sounds[EARTH], "Through climate change I had to let go of more than 20% of animal species, which will never be able to return. I am living. [[slnc 400]] I am the Earth!", EARTH, 6);
     thoughts[EARTH].push_back(thought);
@@ -161,6 +189,11 @@ void testApp::update(){
             }
             break;
         case TRIP_STATE_PLAYING:
+            introSoundFadeOut *= .99;
+            introSound.setVolume(introSoundFadeOut);
+            if (introSoundFadeOut <= .01) {
+                introSound.stop();
+            }
             if (synth.isSpeaking()) {
                 if (usingRandomValues) {
                     series.gaugeInterest(ofRandom(2));
@@ -182,6 +215,7 @@ void testApp::update(){
         case TRIP_STATE_OUTRO:
             if (!synth.isSpeaking()) {
                 tripState = TRIP_STATE_WAITING_FOR_VIEWER;
+                outroSound.stop();
             }
             break;
     }
@@ -191,7 +225,6 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-    
     switch (tripState) {
         case TRIP_STATE_WAITING_FOR_VIEWER:
             ofSetColor(255, 255, 255);
@@ -199,10 +232,21 @@ void testApp::draw(){
 
             break;
         case TRIP_STATE_INTRODUCTION:
-            ofSetColor(255, 255, 255);
-            text.drawString("introduction...", 20, ofGetHeight()/2);
+            heartbeatAlpha = heartbeatAlpha + (heartbeatTempo * heartbeatDirection);
+            cout << "Heartbeat Alpha: " << heartbeatAlpha << endl;
+            if (heartbeatAlpha > 100) {
+                heartbeatDirection = -1;
+            }
+            if(heartbeatAlpha < 10) {
+                heartbeatDirection = 1;
+                heartbeatTempo *= .9;
+            }
+            
+            ofSetColor(255, 255, 255, heartbeatAlpha);
+            heartImage.draw(ofGetWidth()/2 - heartImage.width/2, ofGetHeight()/2 - heartImage.height/2);
             break;
         case TRIP_STATE_PLAYING:
+            ofSetColor(255, 255, 255);
             series.display();
            // currentSynthIndex = series.getCurrentTopic();
             if (firstLine) {
@@ -238,8 +282,7 @@ void testApp::draw(){
             break;
         case TRIP_STATE_OUTRO:
             ofSetColor(255, 255, 255);
-            text.drawString("You Favored ...", 20, ofGetHeight()/2);
-
+            outroImage[selectedTopic].draw(0,0);
             break;
     }
 
@@ -256,6 +299,7 @@ int testApp::favoriteTopic() {
             highestInterestLevel = brainWaveStrength[i];
         }
     }
+    selectedTopic = highestInterestTopic;
     return highestInterestTopic;
 
 }
@@ -381,6 +425,8 @@ void testApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
+    synth.speak("My temperatures have rose since the industrial revolution from coal burning. [[slnc 1000]] Since the 1960s I've heated sharply sharply, [[slnc 500]]I don't think this was from burning pot. [[slnc 500]]I am not chill. I am the Earth. [[slnc 3000]].");
+
 }
 
 

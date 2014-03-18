@@ -17,6 +17,8 @@ void Thought::create(ofImage img, ofSoundPlayer s, string l, int t, int it) {
     iter = it;
     name = "Alex";
     interest = 0;
+    alpha = 0;
+    alphaDirection = 1;
     finished = false;
     effect = ofRandom(1,2);
     switch (effect) {
@@ -36,13 +38,29 @@ void Thought::create(ofImage img, ofSoundPlayer s, string l, int t, int it) {
 }
 
 void Thought::display() {
-    image.draw(position, image.width * scale, image.height * scale);
+    ofPushMatrix();
+    ofTranslate(ofGetWidth()/2, ofGetHeight()/2);
+    ofSetColor(255, 255, 255, alpha);
+    image.draw(position.x - image.width/2, position.y - image.height/2, image.width * scale, image.height * scale);
+    ofPopMatrix();
 }
 void Thought::gaugeInterest(float num) {
     interest += num;
 }
 
 void Thought::move() {
+    if (alphaDirection == 1) {
+        alpha+= alphaDirection;
+    }
+    else {
+        alpha *= .997;
+        
+    }
+
+    if (alpha >= 255) {
+        alphaDirection = -1;
+    }
+    
     switch (effect) {
         case EFFECT_MOVE:
             position.x += moveX;
