@@ -32,16 +32,19 @@ void Series::reset() {
 }
 
 void Series::play() {
-    thoughts[currentThoughtIndex].sound.play();
+    if (currentThoughtIndex != 0) {
+     //   thoughts[currentThoughtIndex].sound.stop();
+     //   cout << "stopping sound" << endl;
+    }
+    //thoughts[currentThoughtIndex].sound.play();
+    //cout << "playing thought sound" << endl;
 }
 int Series::getCurrentTopic() {
     return thoughts[currentThoughtIndex].topic;
 }
 bool Series::nextThought() {
-    thoughts[currentThoughtIndex].sound.stop();
     if (currentThoughtIndex < thoughts.size() - 1) {
         currentThoughtIndex++;
-        thoughts[currentThoughtIndex].sound.play();
         return true;
     }
     else {

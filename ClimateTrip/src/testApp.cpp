@@ -13,8 +13,16 @@ void testApp::setup(){
     synth.setup("com.apple.speech.synthesis.voice.Vicki");
     usingRandomValues = false;
     introSound.loadSound("intro.wav");
-    outroSound.loadSound("intro.wav");
+    outroSound.loadSound("end.wav");
+    outroSound.setVolume(.5);
     heartImage.loadImage("heart.png");
+    sounds[WATER].loadSound("water.aiff");
+    sounds[AIR].loadSound("air.aiff");
+    sounds[EARTH].loadSound("earth.aiff");
+    for (int i = 0; i < 3; i++) {
+        sounds[i].setLoop(true);
+        sounds[i].setVolume(.9);
+    }
     outroImage[WATER].loadImage("ocean.jpg");
     outroImage[EARTH].loadImage("earth.jpg");
     outroImage[AIR].loadImage("air.jpg");
@@ -28,7 +36,7 @@ void testApp::setup(){
     }
     
 	receiver.setup(PORT);
-    camera.setDeviceID(1);
+    camera.setDeviceID(0);
 	camera.setDesiredFrameRate(60);
 	camera.initGrabber(320, 240);
 }
@@ -42,6 +50,7 @@ void testApp::introduction() {
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     synth.speak("[[slnc 5000]]Hello human,[[slnc 1000]] I am very happy to have you here![[slnc 5000]] I want to introduce you to three of my friends. [[slnc 2000]] But before that I want you to take a deep breath.[[slnc 1000]] Relax! [[slnc 2000]] Listen to your heartbeat.[[slnc 15000]].");
     introSound.play();
+
     tripState = TRIP_STATE_INTRODUCTION;
 
 }
@@ -61,11 +70,10 @@ void testApp::flash() {
 void testApp::outro() {
     //TODO: Lookup Most Used Bucket
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
-
-    int randomTweet = int(ofRandom(0,6));
+    loadTweets();
+    int randomTweet = int(ofRandom(0,5));
     twitterClient.postStatus(tweets[favoriteTopic()][randomTweet], viewerImage);
-    synth.setVoice("com.apple.speech.synthesis.voice.Fred");
-
+    
     switch (favoriteTopic()) {
         case WATER:
             synth.speak("Human, I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
@@ -133,8 +141,7 @@ void testApp::loadTweets() {
 }
 void testApp::loadDialogue() {
     Thought thought;
-    //WATER SOUND
-    sounds[WATER].loadSound("water_001.wav");
+
     //WATER IMAGES
     images[WATER][0].loadImage("ocean0.jpg");
     images[WATER][1].loadImage("ocean1.jpg");
@@ -163,8 +170,6 @@ void testApp::loadDialogue() {
     thoughts[WATER].push_back(thought);
     
     
-    //AIR SOUND
-    sounds[AIR].loadSound("atmosphere_001.mp3");
 
     //AIR IMAGES
     images[AIR][0].loadImage("air0.jpg");
@@ -186,7 +191,7 @@ void testApp::loadDialogue() {
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][3], sounds[AIR], "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth more than ever before.[[slnc 500]] I donÕt know what will happen. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 4);
+    thought.create(images[AIR][3], sounds[AIR], "Even if you stop burning fuel now and reduce greenhouse gas emissions to zero I will still heat up the earth more than ever before.[[slnc 500]] I don't know what will happen. [[slnc 1000]] I am the Atmosphere. [[slnc 3000]].", AIR, 4);
     thoughts[AIR].push_back(thought);
     
     
@@ -194,14 +199,10 @@ void testApp::loadDialogue() {
     thoughts[AIR].push_back(thought);
     
     
-    thought.create(images[AIR][5], sounds[AIR], "If we stay on the path weÕre on, I will continue to heat up faster. [[slnc 1000]] I have become your experiment, [[slnc 500]] yet I shelter your only home. I am [[slnc 500]] nervous. I am the atmosphere. [[slnc 3000]].", AIR, 6);
+    thought.create(images[AIR][5], sounds[AIR], "If we stay on the path we're on, I will continue to heat up faster. [[slnc 1000]] I have become your experiment, [[slnc 500]] yet I shelter your only home. I am [[slnc 500]] nervous. I am the atmosphere. [[slnc 3000]].", AIR, 6);
     thoughts[AIR].push_back(thought);
    
-    //EARTH SOUND
-    sounds[EARTH].loadSound("earth_001.mp3");
-
-
-    //EARTH IMAGES - not in directory yet
+     //EARTH IMAGES - not in directory yet
     images[EARTH][0].loadImage("earth0.jpg");
     images[EARTH][1].loadImage("earth1.jpg");
     images[EARTH][2].loadImage("earth2.jpg");
@@ -218,7 +219,7 @@ void testApp::loadDialogue() {
     thoughts[EARTH].push_back(thought);
     thought.create(images[EARTH][2], sounds[EARTH], "The extreme weather is changing my soil so unpredictably that agriculture will lose productivity. [[slnc 1000]] I am confused. I am the Earth. [[slnc 3000]]", EARTH, 3);
     thoughts[EARTH].push_back(thought);
-    thought.create(images[EARTH][3], sounds[EARTH], "My temperatures started to rise along with the industrial revolution. [[slnc 500]] Since the 1960Õs my temperature has risen faster. [[slnc 500]] I am not chill.  [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 4);
+    thought.create(images[EARTH][3], sounds[EARTH], "My temperatures started to rise along with the industrial revolution. [[slnc 500]] Since the 1960's my temperature has risen faster. [[slnc 500]] I am not chill.  [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 4);
     thoughts[EARTH].push_back(thought);
     thought.create(images[EARTH][4], sounds[EARTH], "The ice is melting, leaving more of my minerals accessible. [[slnc 500]] People are digging into me to get them  [[slnc 500]] exposing me. [[slnc 1000]] I am the Earth. [[slnc 3000]].", EARTH, 5);
     thoughts[EARTH].push_back(thought);
@@ -235,12 +236,10 @@ void testApp::update(){
         // get the next message
         ofxOscMessage m;
         receiver.getNextMessage(&m);
-        cout << "got message" << endl;
         
         if (m.getAddress() == "/attention") {
             brainWave = m.getArgAsInt32(0);
 
-            cout << "got attention " << brainWave << endl;
         }
         if (m.getAddress() == "/pulse") {
             //got pulse, let's go!
@@ -270,7 +269,7 @@ void testApp::update(){
             break;
         case TRIP_STATE_PLAYING:
 
-            introSoundFadeOut *= .99;
+            introSoundFadeOut *= .995;
             introSound.setVolume(introSoundFadeOut);
             if (introSoundFadeOut <= .01) {
                 introSound.stop();
@@ -281,8 +280,9 @@ void testApp::update(){
                 }
                 else {
                     series.gaugeInterest(brainWave);
-
                 }
+            }
+            else {
             }
             break;
         case TRIP_STATE_OUTRO:
@@ -312,11 +312,10 @@ void testApp::draw(){
             text.drawString("please put your", ofGetWidth()/2 - (text.stringWidth("please put your")/2), ofGetHeight()/2);
             text.drawString("hands on the globes", ofGetWidth()/2 - (text.stringWidth("hands on the globes")/2), ofGetHeight()/2 + 40);
 
-
             break;
         case TRIP_STATE_INTRODUCTION:
+
             heartbeatAlpha = heartbeatAlpha + (heartbeatTempo * heartbeatDirection);
-            cout << "Heartbeat Alpha: " << heartbeatAlpha << endl;
             if (heartbeatAlpha > 100) {
                 heartbeatDirection = -1;
             }
@@ -331,12 +330,15 @@ void testApp::draw(){
         case TRIP_STATE_PLAYING:
             ofSetColor(255, 255, 255);
             series.display();
-           // currentSynthIndex = series.getCurrentTopic();
             if (firstLine) {
                 if (!synth.isSpeaking()) {
+                    for (int i = 0; i < 3; i++) {
+                        sounds[i].stop();
+                    }
+                    cout << "Playing topic " << series.getCurrentTopic();
+                    sounds[series.getCurrentTopic()].play();
                     switchVoice();
                     synth.speak(series.getCurrentThought());
-                    series.play();
                 }
                 firstLine = false;
             }
@@ -344,6 +346,11 @@ void testApp::draw(){
                 if (!synth.isSpeaking()) {
                     if (series.nextThought()) {
                         switchVoice();
+                        for (int i = 0; i < 3; i++) {
+                            sounds[i].stop();
+                        }
+                        cout << "Playing topic " << series.getCurrentTopic();
+                        sounds[series.getCurrentTopic()].play();
                         synth.speak(series.getCurrentThought());
                     }
                     else {

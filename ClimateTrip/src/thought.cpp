@@ -9,9 +9,9 @@
 #include "thought.h"
 void Thought::create(ofImage img, ofSoundPlayer s, string l, int t, int it) {
     image = img;
-    sound = s;
-    s.setLoop(true);
-    s.setVolume(0);
+//    sound = s;
+//    sound.setLoop(true);
+//    sound.setVolume(1);
     line = l;
     topic = t;
     iter = it;
