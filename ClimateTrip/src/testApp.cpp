@@ -54,9 +54,10 @@ void testApp::introduction() {
     heartbeatAlpha = 10;
     heartbeatTempo = 2;
     tookPhotoWithFlash = false;
+    introSound.setVolume(1);
+    introSound.play();
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
     synth.speak("[[slnc 5000]]Hello human,[[slnc 1000]] I am very happy to have you here![[slnc 5000]] I want to introduce you to three of my friends. [[slnc 2000]] But before that I want you to take a deep breath.[[slnc 1000]] Relax! [[slnc 2000]] Listen to your heartbeat.[[slnc 15000]].");
-    introSound.play();
 
     tripState = TRIP_STATE_INTRODUCTION;
 
@@ -64,7 +65,7 @@ void testApp::introduction() {
 void testApp::flash() {
     ofSetColor(255,255,255, ofMap(ofGetElapsedTimef(), flashTime - .5, flashTime, 255, 0));
     ofRect(0, 0, ofGetWidth(), ofGetHeight());
-    if (ofGetElapsedTimef() > flashTime - .3) {
+    if (ofGetElapsedTimef() > flashTime - .4) {
         viewerImage = takePhoto();
         cout << "Using Image " << viewerImage << endl;
         tookPhotoWithFlash = true;
@@ -79,30 +80,34 @@ void testApp::flash() {
 void testApp::outro() {
     //TODO: Lookup Most Used Bucket
     synth.setVoice("com.apple.speech.synthesis.voice.Fred");
+    /*
     loadTweets();
-    int randomTweet = int(ofRandom(0,5));
+
+    int randomTweet = int(ofRandom(0,6));
     twitterClient.postStatus(tweets[favoriteTopic()][randomTweet], viewerImage);
     if (viewerName == "this human") {
         viewerName = "Human";
     }
+     */
     switch (favoriteTopic()) {
         case WATER:
-            synth.speak(viewerName + ", I am the ocean. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
+            synth.speak(viewerName + ", you seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] You are my friend, " + viewerName + " [[slnc 1000]] I am the ocean. [[slnc 10000]]. ");
             
             break;
         case AIR:
 
-            synth.speak(viewerName + ", I am the atmosphere. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]].");
+            synth.speak(viewerName + ", you seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] You are my friend, " + viewerName + " [[slnc 1000]] I am the atmosphere. [[slnc 10000]]. ");
 
             break;
         case EARTH:
-            synth.speak(viewerName + ", I am the earth. You seem to be concerned very much about my well being! I am very thankful for that![[slnc 500]] Can I get a hug? [[slnc 10000]]");
+            synth.speak(viewerName + ", you seem to be concerned very much about my well being!I am very thankful for that![[slnc 500]] You are my friend, " + viewerName + " [[slnc 1000]] I am the earth. [[slnc 10000]]. ");
             
             
             break;
         default:
             break;
     }
+     
     outroSound.play();
     tripState = TRIP_STATE_OUTRO;
     
@@ -149,6 +154,10 @@ void testApp::loadTweets() {
     tweets[WATER][5] = "oceans, lakes, rivers, creeks, "+viewerName+" loves them all #StoryMatter";
     tweets[EARTH][5] = viewerName + "! gaia loves you! #StoryMatter";
     tweets[AIR][5] = viewerName + "! pure air! pure love! #StoryMatter";
+
+    tweets[WATER][6] = viewerName+" is a friend of the ocean #StoryMatter";
+    tweets[EARTH][6] = viewerName + " is a friend of earth #StoryMatter";
+    tweets[AIR][6] = viewerName + " is a freind of the atmosphere #StoryMatter";
 
 }
 void testApp::loadDialogue() {

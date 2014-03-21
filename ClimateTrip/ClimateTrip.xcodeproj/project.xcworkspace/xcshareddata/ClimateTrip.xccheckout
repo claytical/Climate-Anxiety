@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1F128EE5-9B04-4D57-A738-20AC5D27F232</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ClimateTrip</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4929D22E-2FD2-4A6F-8787-A6D685A3FD4D</key>
+		<string>https://github.com/claytical/Climate-Trip.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ClimateTrip/ClimateTrip.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4929D22E-2FD2-4A6F-8787-A6D685A3FD4D</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/claytical/Climate-Trip.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4929D22E-2FD2-4A6F-8787-A6D685A3FD4D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4929D22E-2FD2-4A6F-8787-A6D685A3FD4D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>storyMatter</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -72,7 +72,7 @@ class testApp : public ofBaseApp{
         ofSoundPlayer outroSound;
         string viewerImage;
         string viewerName;
-        string tweets[3][6];
+        string tweets[3][7];
     
     
     //true for all
